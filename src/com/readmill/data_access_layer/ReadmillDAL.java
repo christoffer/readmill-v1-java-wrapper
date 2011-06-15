@@ -1,4 +1,4 @@
-package com.readmill.objectmodel;
+package com.readmill.data_access_layer;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,15 +20,15 @@ import com.readmill.api.ReadmillAPI.TokenStateListener;
 import com.readmill.api.Request;
 import com.readmill.api.Token;
 
-public class ReadmillObjectLayer {
+public class ReadmillDAL {
 
   private ApiWrapper mWrapper;
 
-  public ReadmillObjectLayer(ApiWrapper wrapper) {
+  public ReadmillDAL(ApiWrapper wrapper) {
     mWrapper = wrapper;
   }
   
-  public ReadmillObjectLayer(String clientId, String clientSecret, URI redirectUri, Token token, Env env) {
+  public ReadmillDAL(String clientId, String clientSecret, URI redirectUri, Token token, Env env) {
     this(new ApiWrapper(clientId, clientSecret, redirectUri, token, env));
   }
   
@@ -40,7 +40,7 @@ public class ReadmillObjectLayer {
     return mWrapper.getToken();
   }
   
-  // todo move into object layer
+  
   public ArrayList<ReadmillBook> searchBooks(String searchText) {
     JSONArray receivedArray;
     ArrayList<ReadmillBook> foundBooks = new ArrayList<ReadmillBook>();
@@ -66,7 +66,7 @@ public class ReadmillObjectLayer {
     return foundBooks;
   }
 
-  // TODO move into object layer
+  
   public ReadmillUser getCurrentUser() {
     try {
       JSONObject data = Http.getJSON(mWrapper.get(Request.to(Endpoints.ME)));
@@ -77,7 +77,7 @@ public class ReadmillObjectLayer {
     return null;
   }
 
-  // TODO move into object layer
+  
   public ReadmillReading getReading(String uri) {
     try {
       JSONObject data = Http.getJSON(mWrapper.get(Request.to(uri))); 
@@ -88,12 +88,12 @@ public class ReadmillObjectLayer {
     return null;
   }
 
-  // TODO move into object layer
+  
   public ReadmillReading getReading(long id) {
     return getReading(String.format(Endpoints.READINGS, id));
   }
 
-  // TODO move into object layer
+  
   public ReadmillReading createReading(ReadmillBook book) {
     Request request = Request.to(Endpoints.BOOK_READINGS, book.id);
     request.add(Params.Reading.IS_PRIVATE, 0);
@@ -115,8 +115,7 @@ public class ReadmillObjectLayer {
 
     return null;
   }
-  
-  // TODO move into object layer
+
   public boolean postPing(ReadmillPing ping) { 
     Request request = Request.to(Endpoints.PING, ping.readingId);
 
@@ -133,22 +132,6 @@ public class ReadmillObjectLayer {
     }
 
     return false;
-  }
-  
-
-  /**
-   * Strip the Scheme and Host from the given uri string
-   */
-  private String _getNakedURI(String uriToStrip) {
-    try {
-      URI uri = new URI(uriToStrip);
-      String host = uri.getHost();
-      int splitIndex = uriToStrip.indexOf(host) + host.length();
-      return uriToStrip.substring(splitIndex);
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-    return uriToStrip;
   }
 
   public boolean exchangeCodeForToken(String code) {
@@ -168,5 +151,22 @@ public class ReadmillObjectLayer {
   public void addTokenStateChangeListener(TokenStateListener listener) {
     mWrapper.addTokenStateListener(listener);
   }
-
+  
+  /**
+   * Strip the Scheme and Host from the given uri string.
+   * This is used on returned URIs since they are absolute, but
+   * this wrapper operates on relative URIs.
+   * TODO: Make the wrapper accept full URIs instead. 
+   */
+  private String _getNakedURI(String uriToStrip) {
+    try {
+      URI uri = new URI(uriToStrip);
+      String host = uri.getHost();
+      int splitIndex = uriToStrip.indexOf(host) + host.length();
+      return uriToStrip.substring(splitIndex);
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+    return uriToStrip;
+  }
 }

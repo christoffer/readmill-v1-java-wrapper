@@ -1,11 +1,9 @@
-package com.readmill.objectmodel;
-
-import java.util.HashMap;
+package com.readmill.data_access_layer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillBook extends ReadmillBaseObject {
+public class ReadmillBook extends ReadmillObject {
   public String title;
   public String author;
   public String coverURL;
@@ -22,7 +20,7 @@ public class ReadmillBook extends ReadmillBaseObject {
   public void fromJSON(JSONObject json) {
     title = json.optString("title", "Unknown Title");
     author = json.optString("author", "Unknown Author");
-    coverURL = json.optString("cover_url", "");
+    coverURL = json.optString("cover_url", null);
     id = json.optLong("id", -1);
   }
 

@@ -1,9 +1,9 @@
-package com.readmill.objectmodel;
+package com.readmill.data_access_layer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillReading extends ReadmillBaseObject {
+public class ReadmillReading extends ReadmillObject {
   public long estimatedTimeLeft = 0;
   public double progress = 0.0;
   

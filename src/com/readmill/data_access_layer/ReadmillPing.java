@@ -1,11 +1,11 @@
-package com.readmill.objectmodel;
+package com.readmill.data_access_layer;
 
 import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillPing extends ReadmillBaseObject {
+public class ReadmillPing extends ReadmillObject {
   public long readingId;
   public String identifier;
   public double progress;

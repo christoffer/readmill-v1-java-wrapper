@@ -1,9 +1,9 @@
-package com.readmill.objectmodel;
+package com.readmill.data_access_layer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillUser extends ReadmillBaseObject {
+public class ReadmillUser extends ReadmillObject {
   public long readmillId;
   public String username;
   public String fullname;

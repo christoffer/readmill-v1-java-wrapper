@@ -1,19 +1,19 @@
-package com.readmill.objectmodel;
+package com.readmill.data_access_layer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class ReadmillBaseObject {
+public abstract class ReadmillObject {
   public final String TAG = this.getClass().getName();
   public long id;
 
-  public ReadmillBaseObject() {}
+  public ReadmillObject() {}
 
-  public ReadmillBaseObject(JSONObject json) {
+  public ReadmillObject(JSONObject json) {
     fromJSON(json);
   }
 
-  public ReadmillBaseObject(String json) throws JSONException {
+  public ReadmillObject(String json) throws JSONException {
     fromJSON(json);
   }
 
