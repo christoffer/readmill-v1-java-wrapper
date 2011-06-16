@@ -1,11 +1,17 @@
-package com.readmill.data_access_layer;
+package com.readmill.dal;
 
 import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillPing extends ReadmillObject {
+public class ReadmillPing extends ReadmillEntity {
+
+  public ReadmillPing() { super(); }
+  public ReadmillPing(JSONObject json) {
+    super(json);
+  }
+
   public long readingId;
   public String identifier;
   public double progress;
@@ -13,7 +19,7 @@ public class ReadmillPing extends ReadmillObject {
   public Date occuredAt;
 
   @Override
-  public void fromJSON(JSONObject json) {
+  public void convertFromJSON(JSONObject json) {
     readingId = json.optLong("reading_id", 0);
     identifier = json.optString("identifier", "");
     progress = json.optLong("progress", 0);
@@ -22,19 +28,18 @@ public class ReadmillPing extends ReadmillObject {
   }
 
   @Override
-  public String toJSON() {
+  public JSONObject convertToJSON() {
+    JSONObject json = new JSONObject();
     try {
-      JSONObject json = new JSONObject();
       json.put("reading_id", readingId);
       json.put("identifier", identifier);
       json.put("progress", progress);
       json.put("duration", duration);
       json.put("occurred_at", occuredAt.getTime());
-      return json.toString();
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    return "{}";
+    return json;
   }
 
 }

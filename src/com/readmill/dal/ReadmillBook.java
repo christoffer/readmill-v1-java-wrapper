@@ -1,0 +1,34 @@
+package com.readmill.dal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class ReadmillBook extends ReadmillEntity {
+
+  public String title;
+  public String author;
+  public String coverUrl;
+  
+  public ReadmillBook() { super(); }
+
+  public ReadmillBook(JSONObject json) {
+    super(json);
+  }
+
+  @Override public void convertFromJSON(JSONObject json) {
+    id = json.optLong("id", -1);
+    title = json.optString("title");
+    author = json.optString("author");
+    coverUrl = json.optString("cover_url");
+  }
+
+  @Override public JSONObject convertToJSON() throws JSONException {
+    JSONObject json = new JSONObject();
+    json.put("id", id);
+    json.put("title", title);
+    json.put("author", author);
+    json.put("cover_url", coverUrl);
+    return json;
+  }
+
+}
