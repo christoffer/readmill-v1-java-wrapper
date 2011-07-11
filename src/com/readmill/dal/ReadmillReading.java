@@ -15,7 +15,15 @@ public class ReadmillReading extends ReadmillEntity {
     int ABANDONED = 4;
   }
 
-  public ReadmillReading() { super(); }
+  public static interface Privacy {
+    int PUBLIC = 0;
+    int PRIVATE = 1;
+  }
+
+  public ReadmillReading() {
+    super();
+  }
+
   public ReadmillReading(JSONObject json) {
     super(json);
   }

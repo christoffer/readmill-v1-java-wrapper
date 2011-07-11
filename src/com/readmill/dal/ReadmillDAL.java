@@ -106,10 +106,17 @@ public class ReadmillDAL {
     return getReading(String.format(Endpoints.READINGS, id));
   }
 
-  public ReadmillReading createReading(ReadmillBook book) {
+  /**
+   * Create a new reading for the provided book
+   * @param book ReadmillBook to create a reading for
+   * @param state Reading state of the reading to create (ReadmillReading.State)
+   * @param privacy Privacy setting for the reading (ReadmillReading.Privacy)
+   * @return the created ReadmillReading if successful, null otherwise
+   */
+  public ReadmillReading createReading(ReadmillBook book, int state, int privacy) {
     Request request = Request.to(Endpoints.BOOK_READINGS, book.id);
-    request.add(Params.Reading.IS_PRIVATE, 0);
-    request.add(Params.Reading.STATE, ReadmillReading.State.OPEN);
+    request.add(Params.Reading.IS_PRIVATE, privacy);
+    request.add(Params.Reading.STATE, state);
 
     try {
       HttpResponse response = mWrapper.post(request);
@@ -128,6 +135,11 @@ public class ReadmillDAL {
     return null;
   }
 
+  /**
+   * Post a ReadmillPing to Readmill
+   * @param ping ReadmillPing to post
+   * @return true if the post was successful, false otherwise
+   */
   public boolean post(ReadmillPing ping) {
     Request request = Request.to(Endpoints.PING, ping.readingId);
 
