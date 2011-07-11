@@ -146,7 +146,7 @@ public class ReadmillDAL {
     request.add(Params.Ping.IDENTIFIER, ping.identifier);
     request.add(Params.Ping.PROGRESS, ping.progress);
     request.add(Params.Ping.DURATION, ping.duration);
-    request.add(Params.Ping.OCCURRED_AT, ping.occuredAt);
+    request.add(Params.Ping.OCCURRED_AT, ping.getOccurredAt());
 
     try {
       HttpResponse response = mWrapper.post(request);
