@@ -41,30 +41,26 @@ public class Request implements Iterable<NameValuePair> {
   private TransferProgressListener listener;
 
   /** Empty request */
-  public Request() {
-  }
+  public Request() {}
 
   /**
-   * @param resource
-   *          the base resource
+   * @param resource the base resource
    */
   public Request(String resource) {
     mResource = resource;
   }
 
   /**
-   * @param resource
-   *          the resource to request
-   * @param args
-   *          optional string expansion arguments (passed to
-   *          String#format(String, Object...)
-   * @throws java.util.IllegalFormatException
-   *           - If a format string contains an illegal syntax,
+   * @param resource the resource to request
+   * @param args optional string expansion arguments (passed to String#format(String,
+   *          Object...)
+   * @throws java.util.IllegalFormatException - If a format string contains an illegal
+   *           syntax,
    * @return the request
    * @see String#format(String, Object...)
    */
   public static Request to(String resource, Object... args) {
-    if (args != null && args.length > 0) {
+    if(args != null && args.length > 0) {
       resource = String.format(resource, args);
     } else {
     }
@@ -74,10 +70,8 @@ public class Request implements Iterable<NameValuePair> {
   /**
    * Adds a key value pair
    * 
-   * @param name
-   *          the name
-   * @param value
-   *          the value
+   * @param name the name
+   * @param value the value
    * @return this
    */
   public Request add(String name, Object value) {
@@ -86,13 +80,12 @@ public class Request implements Iterable<NameValuePair> {
   }
 
   /**
-   * @param args
-   *          a list of arguments
+   * @param args a list of arguments
    * @return this
    */
   public Request with(Object... args) {
-    if (args != null) {
-      if (args.length % 2 != 0)
+    if(args != null) {
+      if(args.length % 2 != 0)
         throw new IllegalArgumentException("need even number of arguments");
       for (int i = 0; i < args.length; i += 2) {
         this.add(args[i].toString(), args[i + 1]);
@@ -104,8 +97,7 @@ public class Request implements Iterable<NameValuePair> {
   /**
    * The request should be made with a specific token.
    * 
-   * @param token
-   *          the token
+   * @param token the token
    * @return this
    */
   public Request usingToken(Token token) {
@@ -120,16 +112,15 @@ public class Request implements Iterable<NameValuePair> {
 
   /**
    * @return a String that is suitable for use as an
-   *         <code>application/x-www-form-urlencoded</code> list of parameters
-   *         in an HTTP PUT or HTTP POST.
+   *         <code>application/x-www-form-urlencoded</code> list of parameters in an HTTP
+   *         PUT or HTTP POST.
    */
   public String queryString() {
     return URLEncodedUtils.format(params, "UTF-8");
   }
 
   /**
-   * @param resource
-   *          the resource
+   * @param resource the resource
    * @return an URL with the query string parameters appended
    */
   public String toUrl(String resource) {
@@ -143,23 +134,20 @@ public class Request implements Iterable<NameValuePair> {
   /**
    * Registers a file to be uploaded with a POST or PUT request.
    * 
-   * @param name
-   *          the name of the file
-   * @param file
-   *          the file to be submitted
+   * @param name the name of the file
+   * @param file the file to be submitted
    * @return this
    */
   public Request withFile(String name, File file) {
-    if (files == null)
+    if(files == null)
       files = new HashMap<String, File>();
-    if (file != null)
+    if(file != null)
       files.put(name, file);
     return this;
   }
 
   /**
-   * @param listener
-   *          a listener for receiving notifications about transfer progress
+   * @param listener a listener for receiving notifications about transfer progress
    * @return this
    */
   public Request setProgressListener(TransferProgressListener listener) {
@@ -178,10 +166,10 @@ public class Request implements Iterable<NameValuePair> {
     try {
       T request = method.newInstance();
       // POST/PUT ?
-      if (request instanceof HttpEntityEnclosingRequestBase) {
+      if(request instanceof HttpEntityEnclosingRequestBase) {
         HttpEntityEnclosingRequestBase enclosingRequest = (HttpEntityEnclosingRequestBase) request;
         // multipart ?
-        if (files != null && !files.isEmpty()) {
+        if(files != null && !files.isEmpty()) {
           MultipartEntity multiPart = new MultipartEntity();
           for (Map.Entry<String, File> e : files.entrySet()) {
             multiPart.addPart(e.getKey(), new FileBody(e.getValue()));
@@ -191,7 +179,7 @@ public class Request implements Iterable<NameValuePair> {
           }
           enclosingRequest.setEntity(listener == null ? multiPart : new CountingMultipartEntity(multiPart, listener));
           // form-urlencoded?
-        } else if (!params.isEmpty()) {
+        } else if(!params.isEmpty()) {
           request.setHeader("Content-Type", "application/x-www-form-urlencoded");
           enclosingRequest.setEntity(new StringEntity(queryString()));
         }
@@ -210,13 +198,11 @@ public class Request implements Iterable<NameValuePair> {
     }
   }
 
-  @Override
-  public String toString() {
+  @Override public String toString() {
     return mResource == null ? queryString() : toUrl();
   }
 
-  @Override
-  public Iterator<NameValuePair> iterator() {
+  @Override public Iterator<NameValuePair> iterator() {
     return params.iterator();
   }
 
@@ -225,8 +211,7 @@ public class Request implements Iterable<NameValuePair> {
    */
   public static interface TransferProgressListener {
     /**
-     * @param amount
-     *          number of bytes already transferred.
+     * @param amount number of bytes already transferred.
      */
     public void transferred(long amount);
   }
@@ -236,20 +221,18 @@ public class Request implements Iterable<NameValuePair> {
       super(value);
     }
 
-    @Override
-    public String getMimeType() {
+    @Override public String getMimeType() {
       return null;
     }
 
-    @Override
-    public String getTransferEncoding() {
+    @Override public String getTransferEncoding() {
       return null;
     }
   }
 
   public boolean hasParam(String param) {
     // TODO Remove this hack when we have support for giving client id in the headers
-    for(NameValuePair pair : params) {
+    for (NameValuePair pair : params) {
       if(pair.getName().equalsIgnoreCase("client_id")) {
         System.out.println("Found sought parameter: " + param);
         return true;

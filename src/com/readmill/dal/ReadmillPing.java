@@ -35,18 +35,11 @@ public class ReadmillPing extends ReadmillEntity {
       json.put("identifier", identifier);
       json.put("progress", progress);
       json.put("duration", duration);
-      json.put("occurred_at", getOccurredAt());
+      json.put("occurred_at", occuredAt);
     } catch (JSONException e) {
       e.printStackTrace();
     }
     return json;
-  }
-
-  /**
-   * @return field occurredAt in the ISO 8601 format
-   */
-  public String getOccurredAt() {
-    return isoDate(occuredAt);
   }
 
 }

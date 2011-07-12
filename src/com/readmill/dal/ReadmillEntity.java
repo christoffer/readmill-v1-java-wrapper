@@ -1,9 +1,5 @@
 package com.readmill.dal;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,8 +11,6 @@ import org.json.JSONObject;
  * 
  */
 public abstract class ReadmillEntity {
-  private static final SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-  private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
   public final String TAG = this.getClass().getName();
   public long id = -1;
 
@@ -70,14 +64,4 @@ public abstract class ReadmillEntity {
    */
   abstract protected JSONObject convertToJSON() throws JSONException;
 
-  /**
-   * Convert the given date to an isoDate suitable for passing to the API
-   *
-   * @param date Date to convert
-   * @return the given date in the ISO 8601 format
-   */
-  protected String isoDate(Date date) {
-    iso8601Format.setTimeZone(utcTimeZone);
-    return iso8601Format.format(date);
-  }
 }

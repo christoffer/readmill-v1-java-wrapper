@@ -11,6 +11,7 @@ public interface Endpoints {
     String USER_DETAILS        = "/users/%d";
 
     // Book
+    String BOOKS               = "/books";
     String BOOK_SEARCH         = "/books";
     String BOOK_READINGS       = "/books/%d/readings";
     

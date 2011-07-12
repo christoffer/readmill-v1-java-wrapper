@@ -53,7 +53,7 @@ public class ReadmillReading extends ReadmillEntity {
   }
 
   public int getState() {
-    return 0;
+    return state;
   }
 
 }

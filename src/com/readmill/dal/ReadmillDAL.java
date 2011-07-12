@@ -2,8 +2,10 @@ package com.readmill.dal;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -20,7 +22,13 @@ import com.readmill.api.ReadmillAPI.TokenStateListener;
 import com.readmill.api.Request;
 import com.readmill.api.Token;
 
+/**
+ * @author christoffer
+ *
+ */
 public class ReadmillDAL {
+  private static final SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+  private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
 
   private ApiWrapper mWrapper;
 
@@ -74,7 +82,8 @@ public class ReadmillDAL {
         try {
           ReadmillBook book = new ReadmillBook((JSONObject) receivedArray.get(i));
           foundBooks.add(book);
-        } catch (JSONException ignored) {}
+        } catch (JSONException ignored) {
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -92,9 +101,9 @@ public class ReadmillDAL {
     return null;
   }
 
-  public ReadmillReading getReading(String uri) {
+  public ReadmillReading getReading(String location) {
     try {
-      JSONObject data = Http.getJSON(mWrapper.get(Request.to(uri)));
+      JSONObject data = Http.getJSON(mWrapper.get(new Request(toResourceURI(location))));
       return new ReadmillReading(data);
     } catch (IOException e) {
       e.printStackTrace();
@@ -105,9 +114,25 @@ public class ReadmillDAL {
   public ReadmillReading getReading(long id) {
     return getReading(String.format(Endpoints.READINGS, id));
   }
-
+  
+  /**
+   * Fetch a book by URI
+   * @param location URI to the book to fetch
+   * @return A ReadmillBook or null
+   */
+  public ReadmillBook getBook(String location) {
+    try {
+      JSONObject data = Http.getJSON(mWrapper.get(new Request(toResourceURI(location))));
+      return new ReadmillBook(data);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+  
   /**
    * Create a new reading for the provided book
+   * 
    * @param book ReadmillBook to create a reading for
    * @param state Reading state of the reading to create (ReadmillReading.State)
    * @param privacy Privacy setting for the reading (ReadmillReading.Privacy)
@@ -124,8 +149,36 @@ public class ReadmillDAL {
       int statusCode = response.getStatusLine().getStatusCode();
 
       if(statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_CONFLICT) {
-        String location = _getNakedURI(response.getFirstHeader("Location").getValue());
+        String location = response.getFirstHeader("Location").getValue();
         return getReading(location);
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+  
+  /**
+   * Create a Book at Readmill
+   * @param title Title of book
+   * @param author Author of book
+   * @return the created ReadmillBook or null
+   */
+  public ReadmillBook createBook(String title, String author) {
+    Request request = Request.to(Endpoints.BOOKS);
+    request.add(Params.Book.TITLE, title);
+    request.add(Params.Book.AUTHOR, author);
+
+    try {
+      HttpResponse response = mWrapper.post(request);
+
+      int statusCode = response.getStatusLine().getStatusCode();
+
+      if(statusCode == HttpStatus.SC_CREATED) {
+        String location = response.getFirstHeader("Location").getValue();
+        return getBook(location);
       }
 
     } catch (IOException e) {
@@ -136,17 +189,21 @@ public class ReadmillDAL {
   }
 
   /**
-   * Post a ReadmillPing to Readmill
-   * @param ping ReadmillPing to post
-   * @return true if the post was successful, false otherwise
+   * Create a Ping at Readmill
+   * @param identifier Unique reading session identifier
+   * @param readingId Reading to ping
+   * @param progress Progress when this ping was sent [0, 1.0]
+   * @param durationSeconds How many seconds of effective reading time that has passed since the last ping
+   * @param occurredAt When the ping occurred
+   * @return true of the Ping was created, false otherwise
    */
-  public boolean post(ReadmillPing ping) {
-    Request request = Request.to(Endpoints.PING, ping.readingId);
+  public boolean postPing(String identifier, long readingId, double progress, long durationSeconds, Date occurredAt) {
+    Request request = Request.to(Endpoints.PING, readingId);
 
-    request.add(Params.Ping.IDENTIFIER, ping.identifier);
-    request.add(Params.Ping.PROGRESS, ping.progress);
-    request.add(Params.Ping.DURATION, ping.duration);
-    request.add(Params.Ping.OCCURRED_AT, ping.getOccurredAt());
+    request.add(Params.Ping.IDENTIFIER, identifier);
+    request.add(Params.Ping.PROGRESS, progress);
+    request.add(Params.Ping.DURATION, durationSeconds);
+    request.add(Params.Ping.OCCURRED_AT, toISODate(occurredAt));
 
     try {
       HttpResponse response = mWrapper.post(request);
@@ -160,19 +217,50 @@ public class ReadmillDAL {
   }
 
   /**
-   * Strip the Scheme and Host from the given URI string. This is used on returned URIs
-   * since they are absolute, but this wrapper operates on relative URIs. TODO: Make the
-   * wrapper accept full URIs instead.
+   * Update the state of a Reading on the server
+   * 
+   * @param reading Reading to update on Readmill
+   * @return
    */
-  private String _getNakedURI(String uriToStrip) {
+  public boolean update(ReadmillReading reading) {
+    Request request = Request.to(Endpoints.READINGS, reading.id);
+
+    request.add(Params.Reading.STATE, reading.state);
+    request.add(Params.Reading.IS_PRIVATE, reading.isPrivate ? 1 : 0);
+
     try {
-      URI uri = new URI(uriToStrip);
-      String host = uri.getHost();
-      int splitIndex = uriToStrip.indexOf(host) + host.length();
-      return uriToStrip.substring(splitIndex);
-    } catch (URISyntaxException e) {
+      HttpResponse response = mWrapper.put(request);
+      System.out.println("Reading UPDATE returned: " + response.getStatusLine().getStatusCode());
+      return response.getStatusLine().getStatusCode() == HttpStatus.SC_OK;
+    } catch (IOException e) {
       e.printStackTrace();
     }
-    return uriToStrip;
+
+    return false;
   }
+  
+  // Helper methods
+  
+  private String toResourceURI(String location) {
+    System.out.println("Converting " + location);
+    try {
+      URI uri = new URI(location);
+      String result = String.format("%s%s%s", uri.getPath(), uri.getQuery(), uri.getFragment());
+      System.out.println("Converted to: " + result);
+    } catch (Exception e) {
+    }
+    return location;
+  }
+  
+  /**
+   * Convert the given date to an isoDate suitable for passing to the API
+   *
+   * @param date Date to convert
+   * @return the given date in the ISO 8601 format
+   */
+  protected String toISODate(Date date) {
+    iso8601Format.setTimeZone(utcTimeZone);
+    return iso8601Format.format(date);
+  }
+
 }

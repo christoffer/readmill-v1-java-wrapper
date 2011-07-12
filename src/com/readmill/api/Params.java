@@ -24,4 +24,9 @@ public interface Params {
         String FULLNAME              = "user[full_name]";
     }
 
+    interface Book {
+      String TITLE                   = "book[title]";
+      String AUTHOR                  = "book[author]";
+    }
+
 }
