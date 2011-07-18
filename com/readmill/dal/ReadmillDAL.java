@@ -24,7 +24,7 @@ import com.readmill.api.Token;
 
 /**
  * @author christoffer
- *
+ * 
  */
 public class ReadmillDAL {
   private static final SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -114,9 +114,10 @@ public class ReadmillDAL {
   public ReadmillReading getReading(long id) {
     return getReading(String.format(Endpoints.READINGS, id));
   }
-  
+
   /**
    * Fetch a book by URI
+   * 
    * @param location URI to the book to fetch
    * @return A ReadmillBook or null
    */
@@ -129,7 +130,7 @@ public class ReadmillDAL {
     }
     return null;
   }
-  
+
   /**
    * Create a new reading for the provided book
    * 
@@ -159,9 +160,10 @@ public class ReadmillDAL {
 
     return null;
   }
-  
+
   /**
    * Create a Book at Readmill
+   * 
    * @param title Title of book
    * @param author Author of book
    * @return the created ReadmillBook or null
@@ -190,10 +192,12 @@ public class ReadmillDAL {
 
   /**
    * Create a Ping at Readmill
+   * 
    * @param identifier Unique reading session identifier
    * @param readingId Reading to ping
    * @param progress Progress when this ping was sent [0, 1.0]
-   * @param durationSeconds How many seconds of effective reading time that has passed since the last ping
+   * @param durationSeconds How many seconds of effective reading time that has passed
+   *          since the last ping
    * @param occurredAt When the ping occurred
    * @return true of the Ping was created, false otherwise
    */
@@ -238,9 +242,9 @@ public class ReadmillDAL {
 
     return false;
   }
-  
+
   // Helper methods
-  
+
   private String toResourceURI(String location) {
     System.out.println("Converting " + location);
     try {
@@ -251,10 +255,10 @@ public class ReadmillDAL {
     }
     return location;
   }
-  
+
   /**
    * Convert the given date to an isoDate suitable for passing to the API
-   *
+   * 
    * @param date Date to convert
    * @return the given date in the ISO 8601 format
    */
