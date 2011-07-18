@@ -7,7 +7,7 @@ public class ReadmillBook extends ReadmillEntity {
 
   public String title;
   public String author;
-  public String coverUrl;
+  public String coverURL;
   
   public ReadmillBook() { super(); }
 
@@ -19,7 +19,7 @@ public class ReadmillBook extends ReadmillEntity {
     id = json.optLong("id", -1);
     title = json.optString("title");
     author = json.optString("author");
-    coverUrl = json.optString("cover_url");
+    coverURL = json.optString("cover_url");
   }
 
   @Override public JSONObject convertToJSON() throws JSONException {
@@ -27,7 +27,7 @@ public class ReadmillBook extends ReadmillEntity {
     json.put("id", id);
     json.put("title", title);
     json.put("author", author);
-    json.put("cover_url", coverUrl);
+    json.put("cover_url", coverURL);
     return json;
   }
 
