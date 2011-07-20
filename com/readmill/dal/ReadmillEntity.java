@@ -18,7 +18,9 @@ public abstract class ReadmillEntity {
     convertFromJSON(json);
   }
 
-  public ReadmillEntity() {}
+  public ReadmillEntity() {
+    convertFromJSON(new JSONObject());
+  }
 
   /**
    * @return True if this entity has a set ID, false otherwise
