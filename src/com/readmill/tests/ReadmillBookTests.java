@@ -14,7 +14,7 @@ public class ReadmillBookTests extends TestCase {
     assertEquals(-1, book.id);
     assertEquals("", book.title);
     assertEquals("", book.author);
-    assertEquals("", book.coverURL);
+    assertEquals(null, book.coverURL);
   }
 
   public void testInitFromJSON() throws JSONException {
