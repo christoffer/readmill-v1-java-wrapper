@@ -1,0 +1,22 @@
+{
+  "id": 101,
+  "username": "jensnockert",
+  "firstname": "Jens",
+  "lastname": "Nockert",
+  "fullname": "Jens Nockert",
+  "country": "Sweden",
+  "city": "Lund",
+  "website": "",
+  "description": "",
+  "uri": "http://api.readmill.com/users/101",
+  "permalink_url": "http://readmill.com/jensnockert",
+  "books_interesting": 1,
+  "books_open": 1,
+  "books_finished": 0,
+  "books_abandoned": 0,
+  "readings": "http://api.readmill.com/users/101/readings",
+  "avatar_url": "http://static.readmill.com/avatars/d281aa934d75016e9f60c2db7e4a55e4-medium.png?1308255920",
+  "followers": 2,
+  "followings": 2,
+  "email": "no@spam.plz"
+}

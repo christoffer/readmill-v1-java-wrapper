@@ -1,0 +1,36 @@
+{
+  "id": 21,
+  "state": 3,
+  "private": false,
+  "recommended": false,
+  "closing_remark": "The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.",
+  "touched_at": "2010-12-14T10:36:21Z",
+  "started_at": "2010-11-29T20:25:56Z",
+  "finished_at": "2010-12-14T10:36:31Z",
+  "abandoned_at": null,
+  "created_at": "2010-11-29T20:25:56Z",
+  "duration": 25500,
+  "progress": 1.0,
+  "estimated_time_left": 0,
+  "average_period_time": "5100.0",
+  "book": {
+    "id": 12,
+    "title": "The Facebook Effect",
+    "author": "David Kirkpatrick",
+    "permalink": "the-facebook-effect",
+    "permalink_url": "http://readmill.com/books/the-facebook-effect",
+    "cover_url": "http://static.readmill.com/covers/cd515b733e3963d467bd15128a666724-medium.png?1291062356"
+  },
+  "user": {
+    "id": 2,
+    "username": "henrik",
+    "fullname": "Henrik Berggren",
+    "avatar_url": "http://static.readmill.com/avatars/c4f503989a8115d83d198c8dd2635ef4-medium.png?1304016207",
+    "permalink_url": "http://api.readmill.com/users/2"
+  },
+  "permalink_url": "http://readmill.com/henrik/reads/the-facebook-effect",
+  "uri": "http://api.readmill.com/readings/21",
+  "periods": "http://api.readmill.com/readings/21/periods",
+  "locations": "http://api.readmill.com/readings/21/locations",
+  "highlights":"http://api.readmill.com/readings/21/highlights"
+}
