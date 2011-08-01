@@ -68,24 +68,38 @@ public abstract class ReadmillEntity {
 
 	public Date fromUTC(String date) {
 		// Customized parse method
+		if(date.equals("") || date.equals("null")){
+			return null;
+		} else{
 		Calendar cal = DatatypeConverter.parseDateTime(date);
 		return new Date(cal.getTimeInMillis());
+		}
 	}
 	
 	public String toUTC(Date date) throws DatatypeConfigurationException {
-		GregorianCalendar gc = new GregorianCalendar();
-		gc.setTime(date);
-		
-		XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance()
-				.newXMLGregorianCalendar(gc);
-		
-		String utcTime = xmlCal.normalize().toXMLFormat(); //does everything right except the .000
-		
-		Pattern p = Pattern.compile("\\.{1}\\d{3}"); //chop off any millisecond, or do we want to round off?
-		Matcher m = p.matcher(utcTime);
-		utcTime = m.replaceAll("");
+		if (date == null || date.equals("")) {
+			return "null";
+		} else {
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTime(date);
 
-		return utcTime;
+			XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance()
+					.newXMLGregorianCalendar(gc);
+
+			String utcTime = xmlCal.normalize().toXMLFormat(); // does
+																// everything
+																// right except
+																// the .000
+
+			Pattern p = Pattern.compile("\\.{1}\\d{3}"); // chop off any
+															// millisecond, or
+															// do we want to
+															// round off?
+			Matcher m = p.matcher(utcTime);
+			utcTime = m.replaceAll("");
+
+			return utcTime;
+		}
 	}
 		
   /**
