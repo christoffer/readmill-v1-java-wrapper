@@ -229,8 +229,8 @@ public class ReadmillDAL {
   public boolean update(ReadmillReading reading) {
     Request request = Request.to(Endpoints.READINGS, reading.id);
 
-    request.add(Params.Reading.STATE, reading.state);
-    request.add(Params.Reading.IS_PRIVATE, reading.isPrivate ? 1 : 0);
+    request.add(Params.Reading.STATE, reading.getState());
+    request.add(Params.Reading.IS_PRIVATE, reading.isPrivate() ? 1 : 0);
 
     try {
       HttpResponse response = mWrapper.put(request);
