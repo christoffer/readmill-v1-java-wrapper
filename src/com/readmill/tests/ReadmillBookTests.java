@@ -1,10 +1,11 @@
 package com.readmill.tests;
 
 import java.util.ArrayList;
+
 import javax.xml.datatype.DatatypeConfigurationException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.readmill.dal.ReadmillBook;
