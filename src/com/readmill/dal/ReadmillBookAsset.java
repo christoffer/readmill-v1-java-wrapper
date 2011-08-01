@@ -1,3 +1,5 @@
+package com.readmill.dal;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,32 +11,68 @@ import org.json.JSONObject;
 
 public class ReadmillBookAsset extends ReadmillEntity{
 
-	public String vendor;
-	public String uri;
-	public int acquisition_type;
-	
-	public ReadmillBookAsset() { 
-		super(); 
+	private String vendor;
+	private String uri;
+	private int acquisitionType;
+
+	/**
+	 * Constructor one
+	 */
+	public ReadmillBookAsset() {
+		super();
 	}
 
+	/**
+	 * Constructor two
+	 */
 	public ReadmillBookAsset(JSONObject json) {
 		super(json);
 	}
 	  
+	public String getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
+	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+	public int getAcquisitionType() {
+		return acquisitionType;
+	}
+
+	public void setAcquisitionType(int acquisition_type) {
+		this.acquisitionType = acquisition_type;
+	}
+
+	/**
+	 * convertFromJSON
+	 */
 	@Override
 	protected void convertFromJSON(JSONObject json) {
 		vendor = json.optString("vendor");
 		uri = json.optString("uri");
-		acquisition_type = json.optInt("acquisition_type");	
+		acquisitionType = json.optInt("acquisition_type");	
 	}
 
+	/**
+	 * convertToJSON
+	 */
 	@Override
 	protected JSONObject convertToJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 	    
 		json.put("vendor", vendor);
 	    json.put("uri", uri);
-	    json.put("acquisition_type", acquisition_type);
+	    json.put("acquisition_type", acquisitionType);
 	    
 	    return json;
 	}
