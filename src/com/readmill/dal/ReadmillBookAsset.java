@@ -13,7 +13,7 @@ public class ReadmillBookAsset extends ReadmillEntity{
 
 	private String vendor;
 	private String uri;
-	private int acquisitionType;
+	private int acquisitionType; //TODO CHANGE!!
 
 	/**
 	 * Constructor one
