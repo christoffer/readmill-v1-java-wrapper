@@ -25,6 +25,8 @@ public class ReadmillUser extends ReadmillEntity {
 	private long followers;
 	private long followings;
 	private String email;
+	
+	//permalink??
 
 	/**
 	 * Constructor one
