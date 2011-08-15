@@ -4,7 +4,6 @@ import org.apache.http.HttpHost;
 
 /**
  * The environment to operate against.
- * Use SANDBOX for testing your app, and LIVE for production applications.
  */
 public enum Env {
     LIVE("api.readmill.com", "readmill.com"),
