@@ -2,108 +2,106 @@ package com.readmill.dal;
 
 import java.util.Date;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * 
  * @author Christoffer
- *
+ * 
  */
 public class ReadmillPing extends ReadmillEntity {
 
-	private long readingId;
-	private String identifier;
-	private long progress; //double or long here??
-	private long duration;
-	private Date occurredAt;
-	 
-	/**
-	 * constructor one
-	 */
-	public ReadmillPing() { 
-		super(); 
-	}
-  
-	/**
-	 * constructor two
-	 * @param json
-	 */
-	public ReadmillPing(JSONObject json) {
-		super(json);
-	}
+  private long readingId;
+  private String identifier;
+  private long progress; // double or long here??
+  private long duration;
+  private Date occurredAt;
 
-	public long getReadingId() {
-		return readingId;
-	}
+  /**
+   * constructor one
+   */
+  public ReadmillPing() {
+    super();
+  }
 
-	public void setReadingId(long readingId) {
-		this.readingId = readingId;
-	}
+  /**
+   * constructor two
+   * 
+   * @param json
+   */
+  public ReadmillPing(JSONObject json) {
+    super(json);
+  }
 
-	public String getIdentifier() {
-		return identifier;
-	}
+  public long getReadingId() {
+    return readingId;
+  }
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+  public void setReadingId(long readingId) {
+    this.readingId = readingId;
+  }
 
-	public long getProgress() {
-		return progress;
-	}
+  public String getIdentifier() {
+    return identifier;
+  }
 
-	public void setProgress(long progress) {
-		this.progress = progress;
-	}
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
 
-	public long getDuration() {
-		return duration;
-	}
+  public long getProgress() {
+    return progress;
+  }
 
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+  public void setProgress(long progress) {
+    this.progress = progress;
+  }
 
-	public Date getOccurredAt() {
-		return occurredAt;
-	}
+  public long getDuration() {
+    return duration;
+  }
 
-	public void setOccurredAt(Date occurredAt) {
-		this.occurredAt = occurredAt;
-	}
+  public void setDuration(long duration) {
+    this.duration = duration;
+  }
 
-	/**
-	 * convertFromJSON
-	 * @param json
-	 */
-	@Override
-	public void convertFromJSON(JSONObject json) {
-		readingId = json.optLong("reading_id", 0);
-		identifier = json.optString("identifier", "");
-		progress = json.optLong("progress", 0);
-		duration = json.optLong("duration", 0);
-		occurredAt = this.fromUTC(json.optString("occurred_at", ""));
-	}
-	
-	/**
-	 * convertToJSON
-	 */
-	@Override
-	public JSONObject convertToJSON() throws DatatypeConfigurationException {
-		JSONObject json = new JSONObject();
-		try {
-			json.put("reading_id", readingId);
-		    json.put("identifier", identifier);
-		    json.put("progress", progress);
-		    json.put("duration", duration);
-		    json.put("occurred_at", this.toUTC(occurredAt));
-		} catch (JSONException e) {
-		    e.printStackTrace();
-		  }
-		return json;
-	}
-	
+  public Date getOccurredAt() {
+    return occurredAt;
+  }
+
+  public void setOccurredAt(Date occurredAt) {
+    this.occurredAt = occurredAt;
+  }
+
+  /**
+   * convertFromJSON
+   * 
+   * @param json
+   */
+  @Override public void convertFromJSON(JSONObject json) {
+    readingId = json.optLong("reading_id", 0);
+    identifier = json.optString("identifier", "");
+    progress = json.optLong("progress", 0);
+    duration = json.optLong("duration", 0);
+    occurredAt = parseUTC(json.optString("occurred_at", ""));
+  }
+
+  /**
+   * convertToJSON
+   */
+  @Override public JSONObject convertToJSON() {
+    JSONObject json = new JSONObject();
+    try {
+      json.put("reading_id", readingId);
+      json.put("identifier", identifier);
+      json.put("progress", progress);
+      json.put("duration", duration);
+      json.put("occurred_at", this.toUTC(occurredAt));
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    return json;
+  }
+
 }

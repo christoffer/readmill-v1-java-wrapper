@@ -140,7 +140,7 @@ public class ReadmillBook extends ReadmillEntity {
 		coverURL = json.optString("cover_url", "");
 		isbn = json.optString("isbn", "");
 		story = json.optString("story", "");
-		publishedAt = this.fromUTC(json.optString("published_at", ""));
+		publishedAt = parseUTC(json.optString("published_at", ""));
 		language = json.optString("language", "");
 		permalink = json.optString("permalink", "");
 		permalinkURL = json.optString("permalink_url", "");
@@ -160,8 +160,7 @@ public class ReadmillBook extends ReadmillEntity {
 	 * @throws DatatypeConfigurationException
 	 */
 	@Override
-	public JSONObject convertToJSON() throws JSONException,
-			DatatypeConfigurationException {
+	public JSONObject convertToJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		JSONArray array = new JSONArray();
 

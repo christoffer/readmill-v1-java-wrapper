@@ -60,7 +60,7 @@ public class ReadmillPingTests extends ReadmillTestCase {
     ping.setIdentifier("identify me!");
     ping.setProgress(14);
     ping.setDuration(4);
-    ping.setOccurredAt(ping.fromUTC("2011-07-29T23:16:43Z"));
+    ping.setOccurredAt(ping.parseUTC("2011-07-29T23:16:43Z"));
 
     JSONObject json = new JSONObject(ping.toJSON());
 

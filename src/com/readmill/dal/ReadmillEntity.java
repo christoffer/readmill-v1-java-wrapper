@@ -1,15 +1,10 @@
 package com.readmill.dal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +18,8 @@ import org.json.JSONObject;
  */
 public abstract class ReadmillEntity {
   public final String TAG = this.getClass().getName();
+  private static final SimpleDateFormat utcDateFormat = createUTCTimeFormat();
+
   public long id = -1;
 
   public ReadmillEntity(JSONObject json) {
@@ -40,68 +37,17 @@ public abstract class ReadmillEntity {
 
   /**
    * @return String value of this object in JSON syntax
- * @throws DatatypeConfigurationException 
    */
-  public String toJSON() throws DatatypeConfigurationException{
+  public String toJSON() {
     try {
-      return convertToJSON().toString();
+      JSONObject json = convertToJSON();
+      return json.toString();
     } catch (JSONException e) {
       e.printStackTrace();
       return "{}";
     }
   }
 
-  /**
-   * Parse a JSON string and apply the values to this object
-   * 
-   * @param json JSON string to pull values from
-   */
-	public void fromJSON(String json) {
-		try {
-			convertFromJSON(new JSONObject(json));
-		} catch (JSONException e) {
-			throw new RuntimeException("Malformed JSON: "
-					+ (json.length() > 80 ? json.substring(0, 80) + "..."
-							: json));
-		}
-	}
-
-	public Date fromUTC(String date) {
-		// Customized parse method
-		if(date.equals("") || date.equals("null")){
-			return null;
-		} else{
-		Calendar cal = DatatypeConverter.parseDateTime(date);
-		return new Date(cal.getTimeInMillis());
-		}
-	}
-	
-	public String toUTC(Date date) throws DatatypeConfigurationException {
-		if (date == null || date.equals("")) {
-			return "null";
-		} else {
-			GregorianCalendar gc = new GregorianCalendar();
-			gc.setTime(date);
-
-			XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance()
-					.newXMLGregorianCalendar(gc);
-
-			String utcTime = xmlCal.normalize().toXMLFormat(); // does
-																// everything
-																// right except
-																// the .000
-
-			Pattern p = Pattern.compile("\\.{1}\\d{3}"); // chop off any
-															// millisecond, or
-															// do we want to
-															// round off?
-			Matcher m = p.matcher(utcTime);
-			utcTime = m.replaceAll("");
-
-			return utcTime;
-		}
-	}
-		
   /**
    * Extensions must implement a way to initialize the DAL object from a JSON object
    * 
@@ -111,7 +57,35 @@ public abstract class ReadmillEntity {
 
   /**
    * Extensions must implement a way to create a JSON string from a DAL object
- * @throws DatatypeConfigurationException 
    */
-  abstract protected JSONObject convertToJSON() throws JSONException, DatatypeConfigurationException;
+  abstract protected JSONObject convertToJSON() throws JSONException;
+
+  /**
+   * Helper method to parse a UTC string into a Date
+   * 
+   * @param dateString UTC Date
+   * @return Date of the parsed date
+   */
+  public Date parseUTC(String dateString) {
+    if(dateString == null || dateString.equals("") || dateString.equals("null")) {
+      return null;
+    } else {
+      try {
+        return utcDateFormat.parse(dateString);
+      } catch (ParseException ignored) {
+        return null;
+      }
+    }
+  }
+
+  public String toUTC(Date date) {
+    return utcDateFormat.format(date);
+  }
+
+  private static SimpleDateFormat createUTCTimeFormat() {
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    df.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return df;
+  }
+
 }

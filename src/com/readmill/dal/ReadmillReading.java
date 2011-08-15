@@ -238,11 +238,11 @@ public class ReadmillReading extends ReadmillEntity {
 		state = json.optInt("state");
 		recommended = json.optBoolean("recommended");
 		closingRemark = json.optString("closing_remark", "");
-		abandonedAt = this.fromUTC(json.optString("abandoned_at", ""));
-		finishedAt = this.fromUTC(json.optString("finished_at", ""));
-		createdAt = this.fromUTC(json.optString("created_at", ""));
-		touchedAt = this.fromUTC(json.optString("touched_at", ""));
-		startedAt = this.fromUTC(json.optString("started_at", ""));
+		abandonedAt = parseUTC(json.optString("abandoned_at", ""));
+		finishedAt = parseUTC(json.optString("finished_at", ""));
+		createdAt = parseUTC(json.optString("created_at", ""));
+		touchedAt = parseUTC(json.optString("touched_at", ""));
+		startedAt = parseUTC(json.optString("started_at", ""));
 		duration = json.optString("duration");
 		locations = json.optString("locations");
 		permalinkUrl = json.optString("permalink_url");
@@ -265,7 +265,7 @@ public class ReadmillReading extends ReadmillEntity {
 	 * @throws DatatypeConfigurationException
 	 */
 	@Override
-	public JSONObject convertToJSON() throws DatatypeConfigurationException {
+	public JSONObject convertToJSON() {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("id", id);

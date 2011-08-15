@@ -98,11 +98,11 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     reading.setPrivate(false);
     reading.setRecommended(false);
     reading.setClosingRemark("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.");
-    reading.setTouchedAt(reading.fromUTC("2010-12-14T10:36:21Z"));
-    reading.setStartedAt(reading.fromUTC("2010-11-29T20:25:56Z"));
-    reading.setFinishedAt(reading.fromUTC("2010-12-14T10:36:31Z"));
-    reading.setAbandonedAt(reading.fromUTC("null"));
-    reading.setCreatedAt(reading.fromUTC("2010-11-29T20:25:56Z"));
+    reading.setTouchedAt(reading.parseUTC("2010-12-14T10:36:21Z"));
+    reading.setStartedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
+    reading.setFinishedAt(reading.parseUTC("2010-12-14T10:36:31Z"));
+    reading.setAbandonedAt(reading.parseUTC("null"));
+    reading.setCreatedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
     reading.setDuration("25500");
     reading.setProgress(1.0);
     reading.setEstimatedTimeLeft(0);

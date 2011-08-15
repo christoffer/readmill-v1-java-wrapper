@@ -53,7 +53,7 @@ public class ReadmillBookTests extends ReadmillTestCase {
     assertEquals("coverURL var", "http://static.readmill.com/covers/800-medium.png", book.getCoverURL());
     assertEquals("isbn var", "9780554354088", book.getISBN());
     assertEquals("story var", "Stately- plump Buck Mulligan...", book.getStory());
-    assertEquals("publishedAt var", book.fromUTC("2008-08-18T23:16:43Z"), book.getPublishedAt());
+    assertEquals("publishedAt var", book.parseUTC("2008-08-18T23:16:43Z"), book.getPublishedAt());
     assertEquals("language var", "en", book.getLanguage());
     assertEquals("permalink var", "ulysses", book.getPermalink());
     assertEquals("permalinkURL var", "http://readmill.com/books/ulysses", book.getPermalinkURL());
@@ -83,7 +83,7 @@ public class ReadmillBookTests extends ReadmillTestCase {
     book.setCoverURL("http://static.readmill.com/covers/800-medium.png");
     book.setISBN("9780554354088");
     book.setStory("Stately- plump Buck Mulligan...");
-    book.setPublishedAt(book.fromUTC("2008-08-18T23:16:43Z"));
+    book.setPublishedAt(book.parseUTC("2008-08-18T23:16:43Z"));
     book.setLanguage("en");
     book.setPermalink("ulysses");
     book.setPermalinkURL("http://readmill.com/books/ulysses");
