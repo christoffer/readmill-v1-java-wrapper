@@ -12,7 +12,7 @@ import com.readmill.dal.ReadmillEntity;
 public class ReadmillEntityTests extends ReadmillTestCase {
   ReadmillEntity instance = new DummyImplementation();
 
-  @Test public void parseUTC() {
+  @Test public void testParseUTC() {
     String validUTCString = "2009-08-21T09:11:21Z";
 
     Calendar cal = Calendar.getInstance();
@@ -34,11 +34,11 @@ public class ReadmillEntityTests extends ReadmillTestCase {
     assertEquals(TimeZone.getTimeZone("UTC"), cal.getTimeZone());
   }
 
-  @Test public void parseUTCWithInvalidString() {
+  @Test public void testParseUTCWithInvalidString() {
     assertEquals(null, instance.parseUTC("20090821T09:11:21Z")); // no dashes
   }
 
-  @Test public void toUTC() {
+  @Test public void testToUTC() {
     Calendar cal = Calendar.getInstance();
 
     cal.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -54,8 +54,8 @@ public class ReadmillEntityTests extends ReadmillTestCase {
     assertEquals("2011-02-28T07:55:01Z", instance.toUTC(cal.getTime()));
   }
 
-  @Test public void toJSONDoesNotFailOnJSONError() {
-    assertEquals("{}", instance.toJSON());
+  @Test public void testToUTCWithNull() {
+    assertEquals("null", instance.toUTC(null));
   }
 
   /**
@@ -68,7 +68,7 @@ public class ReadmillEntityTests extends ReadmillTestCase {
     @Override protected void convertFromJSON(JSONObject json) {}
 
     @Override protected JSONObject convertToJSON() throws JSONException {
-      throw new JSONException("Failed to convert");
+      return null;
     }
   }
 

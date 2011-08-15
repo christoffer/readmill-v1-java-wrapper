@@ -78,6 +78,9 @@ public abstract class ReadmillEntity {
   }
 
   public String toUTC(Date date) {
+    if(date == null) {
+      return "null";
+    }
     return utcDateFormat.format(date);
   }
 
