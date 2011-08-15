@@ -65,7 +65,7 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     assertEquals("recommended: ", false, reading.isRecommended());
     assertEquals("is private: ", false, reading.isPrivate());
     assertEquals("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.", reading.getClosingRemark());
-    assertEquals("abandonedAt: ", "null", reading.toUTC(reading.getAbandonedAt()));
+    assertEquals("abandonedAt: ", null, reading.getAbandonedAt());
     assertEquals("finishedAt: ", "2010-12-14T10:36:31Z", reading.toUTC(reading.getFinishedAt()));
     assertEquals("createdAt: ", "2010-11-29T20:25:56Z", reading.toUTC(reading.getCreatedAt()));
     assertEquals("touchedAt; ", "2010-12-14T10:36:21Z", reading.toUTC(reading.getTouchedAt()));

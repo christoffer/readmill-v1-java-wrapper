@@ -272,11 +272,11 @@ public class ReadmillReading extends ReadmillEntity {
 			json.put("estimated_time_left", estimatedTimeLeft);
 			json.put("progress", progress);
 			json.put("closing_remark", closingRemark);
-			json.put("abandoned_at",  this.toUTC(abandonedAt));
-			json.put("finished_at",  this.toUTC(finishedAt));
-			json.put("created_at",  this.toUTC(createdAt));
-			json.put("touched_at",  this.toUTC(touchedAt));
-			json.put("started_at",  this.toUTC(startedAt));
+			json.put("abandoned_at", toUTC(abandonedAt));
+			json.put("finished_at", toUTC(finishedAt));
+			json.put("created_at", toUTC(createdAt));
+			json.put("touched_at", toUTC(touchedAt));
+			json.put("started_at", toUTC(startedAt));
 			json.put("estimated_time_left", estimatedTimeLeft);
 			json.put("duration", duration);
 			json.put("locations", locations);
