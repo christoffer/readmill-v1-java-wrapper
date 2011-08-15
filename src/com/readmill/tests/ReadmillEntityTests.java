@@ -1,12 +1,7 @@
 package com.readmill.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import javax.swing.CellEditor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +9,7 @@ import org.junit.Test;
 
 import com.readmill.dal.ReadmillEntity;
 
-public class ReadmillEntityTests {
+public class ReadmillEntityTests extends ReadmillTestCase {
   ReadmillEntity instance = new DummyImplementation();
 
   @Test public void parseUTC() {

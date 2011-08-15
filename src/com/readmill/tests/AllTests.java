@@ -13,6 +13,7 @@ public class AllTests {
     suite.addTestSuite(ReadmillPingTests.class);
     suite.addTestSuite(ReadmillReadingTests.class);
     suite.addTestSuite(ReadmillUserTests.class);
+    suite.addTestSuite(ReadmillEntityTests.class);
     //$JUnit-END$
     return suite;
   }
