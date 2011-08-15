@@ -79,14 +79,16 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     assertEquals("average period time: ", "5100.0", reading.getAveragePeriodTime());
 
     // book
-    assertEquals("author of book: ", "David Kirkpatrick", reading.getBook().getAuthor());
-    assertEquals("title of book: ", "The Facebook Effect", reading.getBook().getTitle());
-    assertEquals("permalink of book: ", "the-facebook-effect", reading.getBook().getPermalink());
+    ReadmillBook book = reading.getBook();
+    assertEquals("author of book: ", "David Kirkpatrick", book.getAuthor());
+    assertEquals("title of book: ", "The Facebook Effect", book.getTitle());
+    assertEquals("permalink of book: ", "the-facebook-effect", book.getPermalink());
 
     // user
-    assertEquals("id of user: ", 2, reading.getUser().getId());
-    assertEquals("username: ", "henrik", reading.getUser().getUserName());
-    assertEquals("fullname: ", "Henrik Berggren", reading.getUser().getFullName());
+    ReadmillUser user = reading.getUser();
+    assertEquals("id of user: ", 2, user.getId());
+    assertEquals("username: ", "henrik", user.getUserName());
+    assertEquals("fullname: ", "Henrik Berggren", user.getFullName());
   }
 
   @Test// @Ignore
