@@ -4,76 +4,76 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * 
  * @author Lovisa
- *
  */
 
-public class ReadmillBookAsset extends ReadmillEntity{
+public class ReadmillBookAsset extends ReadmillEntity {
 
-	private String vendor;
-	private String uri;
-	private int acquisitionType; //TODO CHANGE!!
+  private String vendor;
+  private String uri;
+  private int acquisitionType; //TODO CHANGE!!
 
-	/**
-	 * Constructor one
-	 */
-	public ReadmillBookAsset() {
-		super();
-	}
+  /**
+   * Constructor one
+   */
+  public ReadmillBookAsset() {
+    super();
+  }
 
-	/**
-	 * Constructor two
-	 */
-	public ReadmillBookAsset(JSONObject json) {
-		super(json);
-	}
-	  
-	public String getVendor() {
-		return vendor;
-	}
+  /**
+   * Constructor two
+   *
+   * @param json JSON Object to initialize from
+   */
+  public ReadmillBookAsset(JSONObject json) {
+    super(json);
+  }
 
-	public void setVendor(String vendor) {
-		this.vendor = vendor;
-	}
+  public String getVendor() {
+    return vendor;
+  }
 
-	public String getUri() {
-		return uri;
-	}
+  public void setVendor(String vendor) {
+    this.vendor = vendor;
+  }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+  public String getUri() {
+    return uri;
+  }
 
-	public int getAcquisitionType() {
-		return acquisitionType;
-	}
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 
-	public void setAcquisitionType(int acquisition_type) {
-		this.acquisitionType = acquisition_type;
-	}
+  public int getAcquisitionType() {
+    return acquisitionType;
+  }
 
-	/**
-	 * convertFromJSON
-	 */
-	@Override
-	protected void convertFromJSON(JSONObject json) {
-		vendor = json.optString("vendor");
-		uri = json.optString("uri");
-		acquisitionType = json.optInt("acquisition_type");	
-	}
+  public void setAcquisitionType(int acquisition_type) {
+    this.acquisitionType = acquisition_type;
+  }
 
-	/**
-	 * convertToJSON
-	 */
-	@Override
-	protected JSONObject convertToJSON() throws JSONException {
-		JSONObject json = new JSONObject();
-	    
-		json.put("vendor", vendor);
-	    json.put("uri", uri);
-	    json.put("acquisition_type", acquisitionType);
-	    
-	    return json;
-	}
+  /**
+   * convertFromJSON
+   */
+  @Override
+  protected void convertFromJSON(JSONObject json) {
+    vendor = json.optString("vendor");
+    uri = json.optString("uri");
+    acquisitionType = json.optInt("acquisition_type");
+  }
+
+  /**
+   * convertToJSON
+   */
+  @Override
+  protected JSONObject convertToJSON() throws JSONException {
+    JSONObject json = new JSONObject();
+
+    json.put("vendor", vendor);
+    json.put("uri", uri);
+    json.put("acquisition_type", acquisitionType);
+
+    return json;
+  }
 }
