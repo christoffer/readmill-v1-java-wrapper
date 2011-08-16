@@ -73,7 +73,9 @@ public class ReadmillDAL {
       Request request = Request.to(Endpoints.BOOK_SEARCH).with("q", searchText);
 
       HttpResponse response = mWrapper.get(request);
+
       if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+        System.out.println("Status:" + response.getStatusLine().getStatusCode());
         throw new IOException("Failed to search for books");
       }
 
