@@ -131,7 +131,7 @@ public class ApiWrapper implements ReadmillAPI, Serializable {
 			}
 			return token;
 		} else {
-			String sError = new String();
+			String sError = "";
 			try {
 				sError = Http.getString(response);
 			} catch (IOException ignored) {
