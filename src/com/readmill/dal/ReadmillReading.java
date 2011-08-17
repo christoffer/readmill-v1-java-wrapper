@@ -251,11 +251,11 @@ public class ReadmillReading extends ReadmillEntity {
 		highlights = json.optString("highlights");
 		averagePeriodTime = json.optString("average_period_time");
 
-		user = null != null ? new ReadmillUser() : new ReadmillUser(
-				json.optJSONObject("user"));
+    JSONObject jsonUser = json.optJSONObject("user");
+		user = jsonUser == null ? new ReadmillUser() : new ReadmillUser(jsonUser);
 
-		book = null != null ? new ReadmillBook() : new ReadmillBook(
-				json.optJSONObject("book"));
+    JSONObject jsonBook = json.optJSONObject("book");
+		book = jsonBook == null ? new ReadmillBook() : new ReadmillBook(jsonBook);
 
 	}
 
