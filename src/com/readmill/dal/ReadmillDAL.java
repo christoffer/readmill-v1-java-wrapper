@@ -247,15 +247,20 @@ public class ReadmillDAL {
 
   // Helper methods
 
-  private String toResourceURI(String location) {
-    System.out.println("Converting " + location);
+  /**
+   * Strip scheme and host part of URI.
+   * This is necessary since the API uses relative URIs (it sets the host itself)
+   * @param absoluteURI Absolute URI
+   * @return relative URI
+   */
+  private String toResourceURI(String absoluteURI) {
     try {
-      URI uri = new URI(location);
+      URI uri = new URI(absoluteURI);
       String result = String.format("%s%s%s", uri.getPath(), uri.getQuery(), uri.getFragment());
-      System.out.println("Converted to: " + result);
-    } catch (Exception e) {
+    } catch (Exception ignored) {
+      // Ignored
     }
-    return location;
+    return absoluteURI;
   }
 
   /**
