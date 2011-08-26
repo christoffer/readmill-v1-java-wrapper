@@ -13,8 +13,8 @@ public class ReadmillUser extends ReadmillEntity {
 	private String lastName;
 	private String country;
 	private String city;
-	private String website; 
-	private String description; 
+	private String website;
+	private String description;
 	private String uri;
 	private String permalinkUrl;
 	private long booksInteresting;
@@ -25,23 +25,23 @@ public class ReadmillUser extends ReadmillEntity {
 	private long followers;
 	private long followings;
 	private String email;
-	
+
 	//permalink??
 
 	/**
 	 * Constructor one
 	 */
-	public ReadmillUser() { 
-		super(); 
+	public ReadmillUser() {
+		super();
 	}
-	
+
 	/**
 	 * Constructor two
 	 */
 	public ReadmillUser(JSONObject json) {
 		super(json);
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -235,7 +235,7 @@ public class ReadmillUser extends ReadmillEntity {
 	@Override
 	public JSONObject convertToJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		
+
 		json.put("id", id);
 		json.put("username", userName);
 		json.put("fullname", fullName);
@@ -259,4 +259,16 @@ public class ReadmillUser extends ReadmillEntity {
 
 		return json;
 	}
+
+  public String getShortName() {
+    if(firstName.length() > 0) {
+      return firstName;
+    }
+
+    if(userName.length() > 0) {
+      return userName;
+    }
+
+    return "";
+  }
 }
