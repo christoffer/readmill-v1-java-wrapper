@@ -1,5 +1,13 @@
 package com.readmill.dal;
 
+import com.readmill.api.*;
+import com.readmill.api.ReadmillAPI.TokenStateListener;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -7,30 +15,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.readmill.api.ApiWrapper;
-import com.readmill.api.Endpoints;
-import com.readmill.api.Env;
-import com.readmill.api.Http;
-import com.readmill.api.Params;
-import com.readmill.api.ReadmillAPI.TokenStateListener;
-import com.readmill.api.Request;
-import com.readmill.api.Token;
-
-/**
- * @author christoffer
- *
- */
 public class ReadmillDAL {
   private static final SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
 
   private ApiWrapper mWrapper;
+
 
   public ReadmillDAL(ApiWrapper wrapper) {
     mWrapper = wrapper;
@@ -66,55 +57,43 @@ public class ReadmillDAL {
     mWrapper.addTokenStateListener(listener);
   }
 
-  public ArrayList<ReadmillBook> searchBooks(String searchText) {
-    JSONArray receivedArray;
+  public ArrayList<ReadmillBook> searchBooks(String searchText) throws ReadmillException {
     ArrayList<ReadmillBook> foundBooks = new ArrayList<ReadmillBook>();
-    try {
-      Request request = Request.to(Endpoints.BOOK_SEARCH).with("q", searchText);
-
-      HttpResponse response = mWrapper.get(request);
-
-      if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-        System.out.println("Status:" + response.getStatusLine().getStatusCode());
-        throw new IOException("Failed to search for books");
+    JSONArray jsonResult = getAssertedJSONArray(Request.to(Endpoints.BOOK_SEARCH).with("q", searchText));
+    for (int i = 0; i < jsonResult.length(); i++) {
+      try {
+        ReadmillBook book = new ReadmillBook((JSONObject) jsonResult.get(i));
+        foundBooks.add(book);
+      } catch (JSONException ignored) {
+        throw new ReadmillException();
       }
-
-      receivedArray = Http.getJSONArray(mWrapper.get(request));
-      for (int i = 0; i < receivedArray.length(); i++) {
-        try {
-          ReadmillBook book = new ReadmillBook((JSONObject) receivedArray.get(i));
-          foundBooks.add(book);
-        } catch (JSONException ignored) {
-        }
-      }
-    } catch (IOException e) {
-      System.out.println("Failed to search for books");
-      e.printStackTrace();
     }
     return foundBooks;
   }
 
-  public ReadmillUser getCurrentUser() {
-    try {
-      JSONObject data = Http.getJSON(mWrapper.get(Request.to(Endpoints.ME)));
-      return new ReadmillUser(data);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public ReadmillUser getCurrentUser() throws ReadmillException {
+    JSONObject data = getAssertedJSON(Request.to(Endpoints.ME));
+    return new ReadmillUser(data);
   }
 
-  public ReadmillReading getReading(String location) {
-    try {
-      JSONObject data = Http.getJSON(mWrapper.get(new Request(toResourceURI(location))));
-      return new ReadmillReading(data);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+  /**
+   * Retrieve a Readmill Reading by resource URI
+   * @param location resource URI
+   * @return Readmill Reading
+   * @throws ReadmillException When fetching the reading failed
+   */
+  public ReadmillReading getReading(String location) throws ReadmillException {
+    JSONObject jsonReading = getAssertedJSON(Request.to(toResourceURI(location)));
+    return new ReadmillReading(jsonReading);
   }
 
-  public ReadmillReading getReading(long id) {
+  /**
+   * Retrieve a Readmill Reading by ID
+   * @param id resource ID
+   * @return Readmill Reading
+   * @throws ReadmillException When fetching the reading failed
+   */
+  public ReadmillReading getReading(long id) throws ReadmillException {
     return getReading(String.format(Endpoints.READINGS, id));
   }
 
@@ -122,16 +101,12 @@ public class ReadmillDAL {
    * Fetch a book by URI
    *
    * @param location URI to the book to fetch
-   * @return A ReadmillBook or null
+   * @return A ReadmillBook
+   * @throws ReadmillException When fetching the book failed
    */
-  public ReadmillBook getBook(String location) {
-    try {
-      JSONObject data = Http.getJSON(mWrapper.get(new Request(toResourceURI(location))));
-      return new ReadmillBook(data);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public ReadmillBook getBook(String location) throws ReadmillException {
+    JSONObject data = getAssertedJSON(new Request(toResourceURI(location)));
+    return new ReadmillBook(data);
   }
 
   /**
@@ -140,9 +115,10 @@ public class ReadmillDAL {
    * @param book ReadmillBook to create a reading for
    * @param state Reading state of the reading to create (ReadmillReading.State)
    * @param privacy Privacy setting for the reading (ReadmillReading.Privacy)
-   * @return the created ReadmillReading if successful, null otherwise
+   * @return the created ReadmillReading
+   * @throws ReadmillException When the reading could not be created, or retrieving the created reading failed
    */
-  public ReadmillReading createReading(ReadmillBook book, int state, int privacy) {
+  public ReadmillReading createReading(ReadmillBook book, int state, int privacy) throws ReadmillException {
     Request request = Request.to(Endpoints.BOOK_READINGS, book.id);
     request.add(Params.Reading.IS_PRIVATE, privacy);
     request.add(Params.Reading.STATE, state);
@@ -155,13 +131,13 @@ public class ReadmillDAL {
       if(statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_CONFLICT) {
         String location = response.getFirstHeader("Location").getValue();
         return getReading(location);
+      } else {
+        throw new ReadmillException(response.getStatusLine().getStatusCode());
       }
-
     } catch (IOException e) {
       e.printStackTrace();
+      throw new ReadmillException();
     }
-
-    return null;
   }
 
   /**
@@ -169,28 +145,23 @@ public class ReadmillDAL {
    *
    * @param title Title of book
    * @param author Author of book
-   * @return the created ReadmillBook or null
+   * @return the created ReadmillBook
+   * @throws ReadmillException When the operation failed
    */
-  public ReadmillBook createBook(String title, String author) {
+  public ReadmillBook createBook(String title, String author) throws ReadmillException {
     Request request = Request.to(Endpoints.BOOKS);
     request.add(Params.Book.TITLE, title);
     request.add(Params.Book.AUTHOR, author);
 
     try {
       HttpResponse response = mWrapper.post(request);
-
-      int statusCode = response.getStatusLine().getStatusCode();
-
-      if(statusCode == HttpStatus.SC_CREATED) {
-        String location = response.getFirstHeader("Location").getValue();
-        return getBook(location);
-      }
-
+      assertResponseCode(HttpStatus.SC_OK, response);
+      String location = response.getFirstHeader("Location").getValue();
+      return getBook(location);
     } catch (IOException e) {
       e.printStackTrace();
+      throw new ReadmillException();
     }
-
-    return null;
   }
 
   /**
@@ -202,9 +173,9 @@ public class ReadmillDAL {
    * @param durationSeconds How many seconds of effective reading time that has passed
    *          since the last ping
    * @param occurredAt When the ping occurred
-   * @return true of the Ping was created, false otherwise
+   * @throws ReadmillException When the operation failed
    */
-  public boolean postPing(String identifier, long readingId, double progress, long durationSeconds, Date occurredAt) {
+  public void postPing(String identifier, long readingId, double progress, long durationSeconds, Date occurredAt) throws ReadmillException {
     Request request = Request.to(Endpoints.PING, readingId);
 
     request.add(Params.Ping.IDENTIFIER, identifier);
@@ -214,22 +185,26 @@ public class ReadmillDAL {
 
     try {
       HttpResponse response = mWrapper.post(request);
-      System.out.println("PING RETURNED: " + response.getStatusLine().getStatusCode());
-      return response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED;
+      assertResponseCode(HttpStatus.SC_CREATED, response);
     } catch (IOException e) {
       e.printStackTrace();
+      throw new ReadmillException();
     }
+  }
 
-    return false;
+  private void assertResponseCode(int statusCode, HttpResponse response) throws ReadmillException {
+    if(response.getStatusLine().getStatusCode() != statusCode) {
+      throw new ReadmillException(response.getStatusLine().getStatusCode());
+    }
   }
 
   /**
    * Update the state of a Reading on the server
    *
    * @param reading Reading to update on Readmill
-   * @return
+   * @throws ReadmillException When the operation failed
    */
-  public boolean update(ReadmillReading reading) {
+  public void updateReading(ReadmillReading reading) throws ReadmillException {
     Request request = Request.to(Endpoints.READINGS, reading.id);
 
     request.add(Params.Reading.STATE, reading.getState());
@@ -237,13 +212,79 @@ public class ReadmillDAL {
 
     try {
       HttpResponse response = mWrapper.put(request);
-      System.out.println("Reading UPDATE returned: " + response.getStatusLine().getStatusCode());
-      return response.getStatusLine().getStatusCode() == HttpStatus.SC_OK;
+      assertResponseCode(HttpStatus.SC_OK, response);
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
 
-    return false;
+
+  // Private
+
+
+
+  /**
+   * Get a JSON response from the given request. Only returns the JSON if the server responds with the expected
+   * status code, otherwise throw an error.
+   *
+   * @param request Request to send
+   * @param httpStatus Expected status code
+   * @return JSON Object
+   * @throws ReadmillException if an error occurred while responding, or if the status code was not the expected one.
+   */
+  private JSONObject getAssertedJSON(Request request, int httpStatus) throws ReadmillException {
+    try {
+      HttpResponse response = mWrapper.get(request);
+      int receivedStatus = response.getStatusLine().getStatusCode();
+      if(receivedStatus != httpStatus)
+        throw new ReadmillException(receivedStatus);
+      return Http.getJSON(response);
+    } catch(IOException e) {
+      throw new ReadmillException();
+    }
+  }
+
+  /**
+   * Get a JSON response from the given request. Only returns the JSON if the server responds with 200 : OK
+   *
+   * @param request Request to send
+   * @return JSON object
+   * @throws ReadmillException if an error occurred or the response was not 200 : OK
+   */
+  private JSONObject getAssertedJSON(Request request) throws ReadmillException {
+    return getAssertedJSON(request, HttpStatus.SC_OK);
+  }
+
+  /**
+   * Get a JSON response from the given request. Only returns the JSON if the server responds with the expected
+   * status code, otherwise throw an error.
+   *
+   * @param request Request to send
+   * @param httpStatus Expected status code
+   * @return JSON Object
+   * @throws ReadmillException if an error occurred while responding, or if the status code was not the expected one.
+   */
+  private JSONArray getAssertedJSONArray(Request request, int httpStatus) throws ReadmillException {
+    try {
+      HttpResponse response = mWrapper.get(request);
+      int receivedStatus = response.getStatusLine().getStatusCode();
+      if(receivedStatus != httpStatus)
+        throw new ReadmillException(receivedStatus);
+      return Http.getJSONArray(response);
+    } catch(IOException e) {
+      throw new ReadmillException();
+    }
+  }
+
+  /**
+   * Get a JSON response from the given request. Only returns the JSON if the server responds with 200 : OK
+   *
+   * @param request Request to send
+   * @return JSON object
+   * @throws ReadmillException if an error occurred or the response was not 200 : OK
+   */
+  private JSONArray getAssertedJSONArray(Request request) throws ReadmillException {
+    return getAssertedJSONArray(request, HttpStatus.SC_OK);
   }
 
   // Helper methods
@@ -257,10 +298,8 @@ public class ReadmillDAL {
   private String toResourceURI(String absoluteURI) {
     try {
       URI uri = new URI(absoluteURI);
-      String result = String.format("%s%s%s", uri.getPath(), uri.getQuery(), uri.getFragment());
-    } catch (Exception ignored) {
-      // Ignored
-    }
+      return String.format("%s%s%s", uri.getPath(), uri.getQuery(), uri.getFragment());
+    } catch (Exception ignored) {}
     return absoluteURI;
   }
 
