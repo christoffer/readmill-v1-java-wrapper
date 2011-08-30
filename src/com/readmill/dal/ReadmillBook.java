@@ -144,11 +144,13 @@ public class ReadmillBook extends ReadmillEntity {
 		permalinkURL = json.optString("permalink_url", "");
 		uri = json.optString("uri", "");
 
-		if (json.optJSONArray("assets") != null) {
-			for (int i = 0; i < json.optJSONArray("assets").length(); i++) {
-				assets.add(new ReadmillBookAsset(json.optJSONArray("assets")
-						.optJSONObject(i)));
-			}
+    JSONArray jsonAssets = json.optJSONArray("assets");
+		if (jsonAssets != null) {
+			for (int i = 0; i < jsonAssets.length(); i++) {
+        try {
+          assets.add(new ReadmillBookAsset(jsonAssets.getJSONObject(i)));
+        } catch(JSONException ignore) {}
+      }
 		}
 	}
 

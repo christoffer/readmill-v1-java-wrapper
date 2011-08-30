@@ -1,15 +1,13 @@
 package com.readmill.tests;
 
-import java.util.ArrayList;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillBookAsset;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillBookAsset;
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.util.ArrayList;
 
 public class ReadmillBookTests extends ReadmillTestCase {
 
