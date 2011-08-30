@@ -155,7 +155,7 @@ public class ReadmillDAL {
 
     try {
       HttpResponse response = mWrapper.post(request);
-      assertResponseCode(HttpStatus.SC_OK, response);
+      assertResponseCode(HttpStatus.SC_CREATED, response);
       String location = response.getFirstHeader("Location").getValue();
       return getBook(location);
     } catch (IOException e) {

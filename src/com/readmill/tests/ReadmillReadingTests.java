@@ -16,7 +16,7 @@ public class ReadmillReadingTests extends ReadmillTestCase {
   @Test public void testDefaults() {
     ReadmillReading reading = new ReadmillReading();
 
-    assertEquals("id: ", -1, reading.id);
+    assertEquals("id: ", -1, reading.getId());
     assertEquals("state: ", 0, reading.getState());
     assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
     assertEquals("progress ", 0.0, reading.getProgress(), 0.0001);
@@ -45,9 +45,9 @@ public class ReadmillReadingTests extends ReadmillTestCase {
 
   /**
    * Test conversion from a JSON string into a ReadmillBook object.
-   * 
+   *
    * Please see the sampled file for values that should appear here
-   * 
+   *
    * @throws JSONException
    * @throws DatatypeConfigurationException
    */
@@ -58,7 +58,7 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillReading reading = new ReadmillReading(json);
 
-    assertEquals(21, reading.id);
+    assertEquals(21, reading.getId());
     assertEquals("state: ", 3, reading.getState());
     assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
     assertEquals("progress ", 0.0, reading.getProgress(), 0.0001);
@@ -95,7 +95,7 @@ public class ReadmillReadingTests extends ReadmillTestCase {
   public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
     ReadmillReading reading = new ReadmillReading();
 
-    reading.id = 21;
+    reading.setId(21);
     reading.setState(3);
     reading.setPrivate(false);
     reading.setRecommended(false);

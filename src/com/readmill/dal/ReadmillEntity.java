@@ -1,25 +1,25 @@
 package com.readmill.dal;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Abstract Readmill Entity. Requires implementations to implement fromJSON and toJSON for
  * serializing and deserializing to JSON format.
- * 
+ *
  * @author christoffer
- * 
+ *
  */
 public abstract class ReadmillEntity {
   public final String TAG = this.getClass().getName();
   private static final SimpleDateFormat utcDateFormat = createUTCTimeFormat();
 
-  public long id = -1;
+  protected long id = -1;
 
   public ReadmillEntity(JSONObject json) {
     convertFromJSON(json);
@@ -32,6 +32,17 @@ public abstract class ReadmillEntity {
    */
   public boolean isNew() {
     return id == -1;
+  }
+
+  /**
+   * @return The entity ID
+   */
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   /**
@@ -49,7 +60,7 @@ public abstract class ReadmillEntity {
 
   /**
    * Extensions must implement a way to initialize the DAL object from a JSON object
-   * 
+   *
    * @param json JSON to extract values from
    */
   abstract protected void convertFromJSON(JSONObject json);
@@ -61,7 +72,7 @@ public abstract class ReadmillEntity {
 
   /**
    * Helper method to parse a UTC string into a Date
-   * 
+   *
    * @param dateString UTC Date
    * @return Date of the parsed date
    */

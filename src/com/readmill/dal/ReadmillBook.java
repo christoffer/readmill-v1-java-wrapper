@@ -1,16 +1,14 @@
 package com.readmill.dal;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
- * 
+ *
  * @author Christoffer
  *
  */
@@ -156,8 +154,7 @@ public class ReadmillBook extends ReadmillEntity {
 
 	/**
 	 * convertToJSON
-	 * 
-	 * @throws DatatypeConfigurationException
+	 *
 	 */
 	@Override
 	public JSONObject convertToJSON() throws JSONException {
@@ -184,4 +181,5 @@ public class ReadmillBook extends ReadmillEntity {
 
 		return json;
 	}
+
 }

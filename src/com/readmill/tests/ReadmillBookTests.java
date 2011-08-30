@@ -20,7 +20,7 @@ public class ReadmillBookTests extends ReadmillTestCase {
     ReadmillBook book = new ReadmillBook();
 
     // TODO change to empty strings instead of nulls for String values
-    assertEquals("id var", -1, book.id);
+    assertEquals("id var", -1, book.getId());
     assertEquals("title var", null, book.getTitle());
     assertEquals("author var", null, book.getAuthor());
     assertEquals("coverURL var", null, book.getCoverURL());
@@ -36,10 +36,10 @@ public class ReadmillBookTests extends ReadmillTestCase {
   }
 
   /**
-   * Test conversion from a JSON string into a ReadmillBook object. 
-   * 
+   * Test conversion from a JSON string into a ReadmillBook object.
+   *
    * Please see the sampled file for values that should appear here.
-   * 
+   *
    */
   @Test public void testInitFromJSON() throws JSONException {
     mSampleResponse = getResourceContent("sample_book_data.json");
@@ -47,7 +47,7 @@ public class ReadmillBookTests extends ReadmillTestCase {
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillBook book = new ReadmillBook(json);
 
-    assertEquals("id var", 9, book.id);
+    assertEquals("id var", 9, book.getId());
     assertEquals("title var", "Ulysses", book.getTitle());
     assertEquals("author var", "James Joyce", book.getAuthor());
     assertEquals("coverURL var", "http://static.readmill.com/covers/800-medium.png", book.getCoverURL());
@@ -77,7 +77,7 @@ public class ReadmillBookTests extends ReadmillTestCase {
     ReadmillBookAsset first_asset = new ReadmillBookAsset();
     ReadmillBookAsset second_asset = new ReadmillBookAsset();
 
-    book.id = 9;
+    book.setId(9);
     book.setTitle("Ulysses");
     book.setAuthor("James Joyce");
     book.setCoverURL("http://static.readmill.com/covers/800-medium.png");
