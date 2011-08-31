@@ -132,7 +132,6 @@ public class ReadmillBook extends ReadmillEntity {
 		assets = new ArrayList<ReadmillBookAsset>();
 
 		id = json.optLong("id", -1);
-
 		title = json.optString("title", "");
 		author = json.optString("author", "");
 		coverURL = json.optString("cover_url", "");

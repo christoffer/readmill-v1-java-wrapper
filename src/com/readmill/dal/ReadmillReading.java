@@ -222,7 +222,7 @@ public class ReadmillReading extends ReadmillEntity {
 	 */
 	@Override
 	public void convertFromJSON(JSONObject json) {
-		id = json.optLong("id", -1);
+    id = json.optLong("id", -1);
 		estimatedTimeLeft = json.optLong("estimated_time_left", 0);
 		progress = json.optDouble("progress");
 		isPrivate = json.optBoolean("private");

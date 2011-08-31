@@ -1,14 +1,14 @@
 package com.readmill.dal;
 
-import java.util.Date;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
- * 
+ *
  * @author Christoffer
- * 
+ *
  */
 public class ReadmillPing extends ReadmillEntity {
 
@@ -18,18 +18,10 @@ public class ReadmillPing extends ReadmillEntity {
   private long duration;
   private Date occurredAt;
 
-  /**
-   * constructor one
-   */
   public ReadmillPing() {
     super();
   }
 
-  /**
-   * constructor two
-   * 
-   * @param json
-   */
   public ReadmillPing(JSONObject json) {
     super(json);
   }
@@ -76,8 +68,8 @@ public class ReadmillPing extends ReadmillEntity {
 
   /**
    * convertFromJSON
-   * 
-   * @param json
+   *
+   * @param json JSONObject to convert from
    */
   @Override public void convertFromJSON(JSONObject json) {
     readingId = json.optLong("reading_id", 0);
@@ -98,8 +90,7 @@ public class ReadmillPing extends ReadmillEntity {
       json.put("progress", progress);
       json.put("duration", duration);
       json.put("occurred_at", this.toUTC(occurredAt));
-    } catch (JSONException e) {
-      e.printStackTrace();
+    } catch (JSONException ignored) {
     }
     return json;
   }

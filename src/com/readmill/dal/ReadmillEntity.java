@@ -22,7 +22,6 @@ public abstract class ReadmillEntity {
   protected long id = -1;
 
   public ReadmillEntity(JSONObject json) {
-    setId(json.optLong("id", -1));
     convertFromJSON(json);
   }
 
