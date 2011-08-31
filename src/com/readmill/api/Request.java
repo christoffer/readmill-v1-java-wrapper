@@ -5,9 +5,6 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.File;
@@ -34,7 +31,6 @@ public class Request implements Iterable<NameValuePair> {
 	private Map<String, File> files;
 	private Token mToken;
 	private String mResource;
-	private TransferProgressListener listener;
 
 	/** Empty request */
 	public Request() {
@@ -155,16 +151,6 @@ public class Request implements Iterable<NameValuePair> {
 	}
 
 	/**
-	 * @param listener
-	 *            a listener for receiving notifications about transfer progress
-	 * @return this
-	 */
-	public Request setProgressListener(TransferProgressListener listener) {
-		this.listener = listener;
-		return this;
-	}
-
-	/**
 	 * Builds a request with the given set of parameters and files.
 	 *
 	 * @param method
@@ -179,21 +165,7 @@ public class Request implements Iterable<NameValuePair> {
 			// POST/PUT ?
 			if (request instanceof HttpEntityEnclosingRequestBase) {
 				HttpEntityEnclosingRequestBase enclosingRequest = (HttpEntityEnclosingRequestBase) request;
-				// multipart ?
-				if (files != null && !files.isEmpty()) {
-					MultipartEntity multiPart = new MultipartEntity();
-					for (Map.Entry<String, File> e : files.entrySet()) {
-						multiPart.addPart(e.getKey(),
-								new FileBody(e.getValue()));
-					}
-					for (NameValuePair pair : params) {
-						multiPart.addPart(pair.getName(),
-								new StringBodyNoHeaders(pair.getValue()));
-					}
-					enclosingRequest.setEntity(listener == null ? multiPart
-							: new CountingMultipartEntity(multiPart, listener));
-					// form-urlencoded?
-				} else if (!params.isEmpty()) {
+				if (!params.isEmpty()) {
 					request.setHeader("Content-Type",
 							"application/x-www-form-urlencoded");
 					enclosingRequest.setEntity(new StringEntity(queryString()));
@@ -221,34 +193,6 @@ public class Request implements Iterable<NameValuePair> {
 	@Override
 	public Iterator<NameValuePair> iterator() {
 		return params.iterator();
-	}
-
-	/**
-	 * Updates about the amount of bytes already transferred.
-	 */
-	public static interface TransferProgressListener {
-		/**
-		 * @param amount
-		 *            number of bytes already transferred.
-		 */
-		public void transferred(long amount);
-	}
-
-	static class StringBodyNoHeaders extends StringBody {
-		public StringBodyNoHeaders(String value)
-				throws UnsupportedEncodingException {
-			super(value);
-		}
-
-		@Override
-		public String getMimeType() {
-			return null;
-		}
-
-		@Override
-		public String getTransferEncoding() {
-			return null;
-		}
 	}
 
 	public boolean hasParam(String param) {
