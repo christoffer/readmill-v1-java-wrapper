@@ -1,11 +1,9 @@
 package com.readmill.dal;
 
-import java.util.Date;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 /**
  * @author Christoffer
@@ -51,20 +49,13 @@ public class ReadmillReading extends ReadmillEntity {
 		int PRIVATE = 1;
 	}
 
-	/**
-	 * constructor one
-	 */
 	public ReadmillReading() {
 		super();
 	}
- 
-	/**
-	 * constructor two
-	 * @param json
-	 */
-	public ReadmillReading(JSONObject json) {
-		super(json);
-	}
+
+  public ReadmillReading(JSONObject json) {
+    super(json);
+  }
 
 	public long getEstimatedTimeLeft() {
 		return estimatedTimeLeft;
@@ -259,11 +250,6 @@ public class ReadmillReading extends ReadmillEntity {
 
 	}
 
-	/**
-	 * convertToJSON
-	 * 
-	 * @throws DatatypeConfigurationException
-	 */
 	@Override
 	public JSONObject convertToJSON() {
 		JSONObject json = new JSONObject();
@@ -289,12 +275,7 @@ public class ReadmillReading extends ReadmillEntity {
 			json.put("state", state);
 			json.put("highlights", highlights);
 			json.put("average_period_time", averagePeriodTime);
-
-			json.put("user", user.convertToJSON());
-			json.put("book", book.convertToJSON());
-
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
 		return json;
 	}

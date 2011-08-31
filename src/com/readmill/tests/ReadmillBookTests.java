@@ -9,11 +9,12 @@ import org.junit.Test;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.ArrayList;
 
-public class ReadmillBookTests extends ReadmillTestCase {
+import static junit.framework.Assert.assertEquals;
 
-  private String mSampleResponse;
+public class ReadmillBookTests {
 
-  @Test public void testDefaults() {
+  @Test
+  public void testDefaults() {
 
     ReadmillBook book = new ReadmillBook();
 
@@ -33,14 +34,9 @@ public class ReadmillBookTests extends ReadmillTestCase {
 
   }
 
-  /**
-   * Test conversion from a JSON string into a ReadmillBook object.
-   *
-   * Please see the sampled file for values that should appear here.
-   *
-   */
-  @Test public void testInitFromJSON() throws JSONException {
-    mSampleResponse = getResourceContent("sample_book_data.json");
+  @Test
+  public void testInitFromJSON() throws JSONException {
+    String mSampleResponse = TestUtils.getResourceContent("sample_book_data.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillBook book = new ReadmillBook(json);
@@ -58,16 +54,17 @@ public class ReadmillBookTests extends ReadmillTestCase {
     assertEquals("uri var", "http://api.readmill.com/books/9", book.getURI());
 
     // assets
-    assertEquals("assets array: object 0: vendor", "feedbooks", book .getAssets().get(0).getVendor());
+    assertEquals("assets array: object 0: vendor", "feedbooks", book.getAssets().get(0).getVendor());
     assertEquals("assets array: object 0: uri", "http://www.feedbooks.com/book/1232.epub", book.getAssets().get(0).getUri());
-    assertEquals("assets array: object 0: acquisition_type", 0, book .getAssets().get(0).getAcquisitionType());
+    assertEquals("assets array: object 0: acquisition_type", 0, book.getAssets().get(0).getAcquisitionType());
     assertEquals("assets array: object 1: vendor", "gutenberg", book.getAssets().get(1).getVendor());
     assertEquals("assets array: object 1: uri", "http://www.projectgutenberg.com/5432.epub", book.getAssets().get(1).getUri());
     assertEquals("assets array: object 1: acquisition_type", 1, book.getAssets().get(1).getAcquisitionType());
 
   }
 
-  @Test public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
+  @Test
+  public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
     // Set the expected values on the ReadmillBook object
     ReadmillBook book = new ReadmillBook();
 

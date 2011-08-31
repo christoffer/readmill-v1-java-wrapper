@@ -1,22 +1,21 @@
 package com.readmill.tests;
 
-import javax.xml.datatype.DatatypeConfigurationException;
+import com.readmill.dal.ReadmillBookAsset;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBookAsset;
+import javax.xml.datatype.DatatypeConfigurationException;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
- * 
  * @author Lovisa
- * 
  */
-public class ReadmillBookAssetTests extends ReadmillTestCase {
+public class BookAssetTests {
 
-  private String mSampleResponse;
-
-  @Test public void testDefault() throws JSONException {
+  @Test
+  public void testDefault() throws JSONException {
     ReadmillBookAsset assets = new ReadmillBookAsset();
 
     // TODO change to empty string instead of null for String types
@@ -27,15 +26,15 @@ public class ReadmillBookAssetTests extends ReadmillTestCase {
 
   /**
    * Test conversion from a JSON string into a ReadmillBookAsset object.
-   * 
+   * <p/>
    * Please see the sampled file for values that should appear here.
-   * 
-   * @throws JSONException
-   * @throws FileNotFoundException
+   *
+   * @throws org.json.JSONException When the file did not contain valid JSON
    */
 
-  @Test public void testInitFromJSON() throws JSONException {
-    mSampleResponse = getResourceContent("sample_book_assets_data.json");
+  @Test
+  public void testInitFromJSON() throws JSONException {
+    String mSampleResponse = com.readmill.tests.TestUtils.getResourceContent("sample_book_assets_data.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillBookAsset assets = new ReadmillBookAsset(json);
@@ -45,7 +44,8 @@ public class ReadmillBookAssetTests extends ReadmillTestCase {
     assertEquals("acquisition_type var", 0, assets.getAcquisitionType());
   }
 
-  @Test public void testConvertToJSON() throws JSONException,
+  @Test
+  public void testConvertToJSON() throws JSONException,
       DatatypeConfigurationException {
     ReadmillBookAsset assets = new ReadmillBookAsset();
 

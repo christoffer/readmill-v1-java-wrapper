@@ -1,18 +1,21 @@
 package com.readmill.tests;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
+import com.readmill.dal.ReadmillEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillEntity;
+import java.util.Calendar;
+import java.util.TimeZone;
 
-public class ReadmillEntityTests extends ReadmillTestCase {
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+
+public class EntityTests {
   ReadmillEntity instance = new DummyImplementation();
 
-  @Test public void testParseUTC() {
+  @Test
+  public void testParseUTC() {
     String validUTCString = "2009-08-21T09:11:21Z";
 
     Calendar cal = Calendar.getInstance();
@@ -34,11 +37,13 @@ public class ReadmillEntityTests extends ReadmillTestCase {
     assertEquals(TimeZone.getTimeZone("UTC"), cal.getTimeZone());
   }
 
-  @Test public void testParseUTCWithInvalidString() {
+  @Test
+  public void testParseUTCWithInvalidString() {
     assertEquals(null, instance.parseUTC("20090821T09:11:21Z")); // no dashes
   }
 
-  @Test public void testToUTC() {
+  @Test
+  public void testToUTC() {
     Calendar cal = Calendar.getInstance();
 
     cal.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -49,25 +54,28 @@ public class ReadmillEntityTests extends ReadmillTestCase {
 
     cal.set(Calendar.HOUR_OF_DAY, 7);
     cal.set(Calendar.MINUTE, 55);
-    cal.set(Calendar.SECOND, 01);
+    cal.set(Calendar.SECOND, 1);
 
     assertEquals("2011-02-28T07:55:01Z", instance.toUTC(cal.getTime()));
   }
 
-  @Test public void testToUTCWithNull() {
+  @Test
+  public void testToUTCWithNull() {
     assertEquals("null", instance.toUTC(null));
   }
 
   /**
    * Dummy implementation lets us test inherited methods on the abstract ReadmillEntity
    * class
-   * 
+   *
    * @author christoffer
    */
   class DummyImplementation extends ReadmillEntity {
-    @Override protected void convertFromJSON(JSONObject json) {}
+    @Override
+    protected void convertFromJSON(JSONObject json) {}
 
-    @Override protected JSONObject convertToJSON() throws JSONException {
+    @Override
+    protected JSONObject convertToJSON() throws JSONException {
       return null;
     }
   }

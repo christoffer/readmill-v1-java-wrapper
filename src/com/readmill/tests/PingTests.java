@@ -1,22 +1,21 @@
 package com.readmill.tests;
 
-import javax.xml.datatype.DatatypeConfigurationException;
+import com.readmill.dal.ReadmillPing;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillPing;
+import static junit.framework.Assert.assertEquals;
 
-public class ReadmillPingTests extends ReadmillTestCase {
-
-  private String mSampleResponse;
+public class PingTests {
 
   /**
    * Test that the defaults set when creating an "empty" object contains expected values.
    * This is to avoid having for example a null value show up when you are expecting an
    * integer or a String.
    */
-  @Test public void testDefaults() {
+  @Test
+  public void testDefaults() {
     ReadmillPing ping = new ReadmillPing();
 
     assertEquals("readingId: ", 0, ping.getReadingId());
@@ -27,14 +26,9 @@ public class ReadmillPingTests extends ReadmillTestCase {
 
   }
 
-  /**
-   * Test conversion from a JSON string into a ReadmillBook object.
-   * 
-   * Please see the sampled file for values that should appear here.
-   * 
-   */
-  @Test public void testInitFromJSON() throws JSONException, DatatypeConfigurationException {
-    mSampleResponse = getResourceContent("sample_ping_data.json");
+  @Test
+  public void testInitFromJSON() throws JSONException {
+    String mSampleResponse = TestUtils.getResourceContent("sample_ping_data.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillPing ping = new ReadmillPing(json);
@@ -47,13 +41,8 @@ public class ReadmillPingTests extends ReadmillTestCase {
 
   }
 
-  /**
-   * testConvertToJSON
-   * 
-   * @throws JSONException
-   * @throws DatatypeConfigurationException
-   */
-  @Test public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
+  @Test
+  public void testConvertToJSON() throws JSONException {
     ReadmillPing ping = new ReadmillPing();
 
     ping.setReadingId(19);

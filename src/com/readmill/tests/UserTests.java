@@ -1,27 +1,22 @@
 package com.readmill.tests;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
+import com.readmill.dal.ReadmillUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillUser;
+import javax.xml.datatype.DatatypeConfigurationException;
 
-public class ReadmillUserTests extends ReadmillTestCase {
+import static junit.framework.Assert.assertEquals;
 
-  private String mSampleResponse;
+public class UserTests {
 
-  /**
-   * testDefault
-   * 
-   * @throws JSONException
-   */
-  @Test public void testDefault() throws JSONException {
+  @Test
+  public void testDefault() throws JSONException {
 
     ReadmillUser user = new ReadmillUser();
 
-    assertEquals("id: ", 0, user.getId());
+    assertEquals("id: ", -1, user.getId());
     assertEquals("username: ", null, user.getUserName());
     assertEquals("fullname: ", null, user.getFullName());
     assertEquals("avatarUrl: ", null, user.getAvatarUrl());
@@ -43,15 +38,11 @@ public class ReadmillUserTests extends ReadmillTestCase {
 
   }
 
-  /**
-   * testInitFromJSON
-   * 
-   * @throws JSONException
-   */
-  @Test public void testInitFromJSON() throws JSONException {
+  @Test
+  public void testInitFromJSON() throws JSONException {
     // Load the sample JSON string from
     // /com/readmill/tests/resources/sample_user_data.json"
-    mSampleResponse = getResourceContent("sample_user_data.json");
+    String mSampleResponse = TestUtils.getResourceContent("sample_user_data.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillUser user = new ReadmillUser(json);
@@ -68,8 +59,8 @@ public class ReadmillUserTests extends ReadmillTestCase {
     assertEquals("uri", "http://api.readmill.com/users/101", user.getUri());
     assertEquals("permalinkUrl: ", "http://readmill.com/jensnockert",
         user.getPermalinkUrl());
-    assertEquals("avatarUrl: ","http://static.readmill.com/avatars/" +
-            "d281aa934d75016e9f60c2db7e4a55e4-medium.png?1308255920",
+    assertEquals("avatarUrl: ", "http://static.readmill.com/avatars/" +
+        "d281aa934d75016e9f60c2db7e4a55e4-medium.png?1308255920",
         user.getAvatarUrl());
     assertEquals("booksInteresting: ", 1, user.getBooksInteresting());
     assertEquals("booksOpen: ", 1, user.getBooksOpen());
@@ -83,13 +74,8 @@ public class ReadmillUserTests extends ReadmillTestCase {
     assertEquals("email: ", "no@spam.plz", user.getEmail());
   }
 
-  /**
-   * testToConvertToJSON
-   * 
-   * @throws JSONException
-   * @throws DatatypeConfigurationException
-   */
-  @Test public void testToConvertToJSON() throws JSONException,
+  @Test
+  public void testToConvertToJSON() throws JSONException,
       DatatypeConfigurationException {
     ReadmillUser user = new ReadmillUser();
 
@@ -131,7 +117,7 @@ public class ReadmillUserTests extends ReadmillTestCase {
     assertEquals("permalinkUrl: ", "http://readmill.com/jensnockert",
         json.optString("permalink_url"));
     assertEquals("avatarUrl: ", "http://static.readmill.com/avatars/" +
-            "d281aa934d75016e9f60c2db7e4a55e4-medium.png?1308255920",
+        "d281aa934d75016e9f60c2db7e4a55e4-medium.png?1308255920",
         json.optString("avatar_url"));
     assertEquals("booksInteresting: ", 1, json.optLong("books_interesting"));
     assertEquals("booksOpen: ", 1, json.optLong("books_open"));

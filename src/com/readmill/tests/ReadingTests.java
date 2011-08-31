@@ -1,19 +1,20 @@
 package com.readmill.tests;
 
-import javax.xml.datatype.DatatypeConfigurationException;
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillReading;
+import com.readmill.dal.ReadmillUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillReading;
-import com.readmill.dal.ReadmillUser;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 
-public class ReadmillReadingTests extends ReadmillTestCase {
+public class ReadingTests {
 
-  private String mSampleResponse;
-
-  @Test public void testDefaults() {
+  @Test
+  public void testDefaults() {
     ReadmillReading reading = new ReadmillReading();
 
     assertEquals("id: ", -1, reading.getId());
@@ -43,17 +44,9 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     // assertEquals("id of user: ", null, reading.getUser());
   }
 
-  /**
-   * Test conversion from a JSON string into a ReadmillBook object.
-   *
-   * Please see the sampled file for values that should appear here
-   *
-   * @throws JSONException
-   * @throws DatatypeConfigurationException
-   */
-
-  @Test public void testInitFromJSON() throws JSONException, DatatypeConfigurationException {
-    mSampleResponse = getResourceContent("sample_reading_response.json");
+  @Test
+  public void testInitFromJSON() throws JSONException {
+    String mSampleResponse = TestUtils.getResourceContent("sample_reading_response.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillReading reading = new ReadmillReading(json);
@@ -92,7 +85,7 @@ public class ReadmillReadingTests extends ReadmillTestCase {
   }
 
   @Test// @Ignore
-  public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
+  public void testConvertToJSON() throws JSONException {
     ReadmillReading reading = new ReadmillReading();
 
     reading.setId(21);
@@ -120,16 +113,18 @@ public class ReadmillReadingTests extends ReadmillTestCase {
 
     user.setUserName("henrik");
     user.setFullName("Henrik Berggren");
-    user.setId(2);
+    user.setId(22);
+
+    reading.setUser(user);
 
     // book
     ReadmillBook book = new ReadmillBook();
 
+    book.setId(33);
     book.setAuthor("David Kirkpatrick");
     book.setTitle("The Facebook Effect");
     book.setPermalink("the-facebook-effect");
 
-    reading.setUser(user);
     reading.setBook(book);
 
     JSONObject json = new JSONObject(reading.toJSON());
@@ -157,15 +152,9 @@ public class ReadmillReadingTests extends ReadmillTestCase {
     assertEquals("highlights: ", "http://api.readmill.com/readings/21/highlights", json.optString("highlights"));
     assertEquals("average period time: ", "5100.0", json.optString("average_period_time"));
 
-    // book
-    assertEquals("author of book: ", "David Kirkpatrick", json.optJSONObject("book").optString("author"));
-    assertEquals("title of book: ", "The Facebook Effect", json.optJSONObject("book").optString("title"));
-    assertEquals("permalink of book: ", "the-facebook-effect", json.optJSONObject("book").optString("permalink"));
-
-    // user
-    assertEquals("id of user: ", 2, json.optJSONObject("user").optInt("id"));
-    assertEquals("username: ", "henrik", json.optJSONObject("user").optString("username"));
-    assertEquals("fullname: ", "Henrik Berggren", json.optJSONObject("user").optString("fullname"));
+    // should not include sub resources when converting to json
+    assertNull("Does not include subresource user", json.optJSONObject("user"));
+    assertNull("Does not include subresource book", json.optJSONObject("book"));
 
   }
 }

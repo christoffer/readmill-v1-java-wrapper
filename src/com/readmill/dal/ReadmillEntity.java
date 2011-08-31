@@ -22,6 +22,7 @@ public abstract class ReadmillEntity {
   protected long id = -1;
 
   public ReadmillEntity(JSONObject json) {
+    setId(json.optLong("id", -1));
     convertFromJSON(json);
   }
 
@@ -53,7 +54,6 @@ public abstract class ReadmillEntity {
       JSONObject json = convertToJSON();
       return json.toString();
     } catch (JSONException e) {
-      e.printStackTrace();
       return "{}";
     }
   }
@@ -67,6 +67,8 @@ public abstract class ReadmillEntity {
 
   /**
    * Extensions must implement a way to create a JSON string from a DAL object
+   * @return The converted JSON object
+   * @throws org.json.JSONException When the object could not be converted
    */
   abstract protected JSONObject convertToJSON() throws JSONException;
 

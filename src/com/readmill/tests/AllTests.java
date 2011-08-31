@@ -1,21 +1,16 @@
 package com.readmill.tests;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-public class AllTests {
+@RunWith(Suite.class)
+@Suite.SuiteClasses( {
+    BookAssetTests.class,
+    ReadmillBookTests.class,
+    PingTests.class,
+    ReadingTests.class,
+    UserTests.class,
+    EntityTests.class
+})
 
-  public static Test suite() {
-    TestSuite suite = new TestSuite(AllTests.class.getName());
-    //$JUnit-BEGIN$
-    suite.addTestSuite(ReadmillBookAssetTests.class);
-    suite.addTestSuite(ReadmillBookTests.class);
-    suite.addTestSuite(ReadmillPingTests.class);
-    suite.addTestSuite(ReadmillReadingTests.class);
-    suite.addTestSuite(ReadmillUserTests.class);
-    suite.addTestSuite(ReadmillEntityTests.class);
-    //$JUnit-END$
-    return suite;
-  }
-
-}
+public class AllTests {}
