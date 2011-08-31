@@ -319,8 +319,6 @@ public class ApiWrapper implements ReadmillAPI, Serializable {
 
 	/** Adds all required headers to the request */
 	protected HttpRequest addHeaders(HttpRequest req) {
-		System.out.println("ApiWrapper: addHeaders with token: "
-				+ mToken.access);
 		return addAcceptHeader(addAuthHeader(req));
 	}
 

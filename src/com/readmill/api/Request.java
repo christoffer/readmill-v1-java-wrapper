@@ -1,14 +1,5 @@
 package com.readmill.api;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -19,16 +10,21 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.util.*;
+
 /**
  * Convenience class for constructing HTTP requests.
- * 
+ *
  * Example: <code>
  *   <pre>
  *  HttpRequest request = Request.to("/tracks")
  *     .with("track[user]", 1234)
  *     .withFile("track[asset_data]", new File("track.mp3")
  *     .buildRequest(HttpPost.class);
- * 
+ *
  *  httpClient.execute(request);
  *   </pre>
  *  </code>
@@ -73,7 +69,7 @@ public class Request implements Iterable<NameValuePair> {
 
 	/**
 	 * Adds a key value pair
-	 * 
+	 *
 	 * @param name
 	 *            the name
 	 * @param value
@@ -104,7 +100,7 @@ public class Request implements Iterable<NameValuePair> {
 
 	/**
 	 * The request should be made with a specific token.
-	 * 
+	 *
 	 * @param token
 	 *            the token
 	 * @return this
@@ -143,7 +139,7 @@ public class Request implements Iterable<NameValuePair> {
 
 	/**
 	 * Registers a file to be uploaded with a POST or PUT request.
-	 * 
+	 *
 	 * @param name
 	 *            the name of the file
 	 * @param file
@@ -170,7 +166,7 @@ public class Request implements Iterable<NameValuePair> {
 
 	/**
 	 * Builds a request with the given set of parameters and files.
-	 * 
+	 *
 	 * @param method
 	 *            the type of request to use
 	 * @param <T>
@@ -260,7 +256,6 @@ public class Request implements Iterable<NameValuePair> {
 		// the headers
 		for (NameValuePair pair : params) {
 			if (pair.getName().equalsIgnoreCase("client_id")) {
-				System.out.println("Found sought parameter: " + param);
 				return true;
 			}
 		}
