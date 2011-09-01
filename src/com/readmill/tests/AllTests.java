@@ -4,7 +4,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses( {
+@Suite.SuiteClasses
+({
     BookAssetTests.class,
     ReadmillBookTests.class,
     PingTests.class,
@@ -12,5 +13,4 @@ import org.junit.runners.Suite;
     UserTests.class,
     EntityTests.class
 })
-
 public class AllTests {}
