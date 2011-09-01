@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -31,7 +30,6 @@ public class ReadmillBookTests {
     assertEquals("permalinkURL var", null, book.getPermalinkURL());
     assertEquals("uri var", null, book.getURI());
     assertEquals("assets array", new ArrayList<ReadmillBookAsset>(), book.getAssets());
-
   }
 
   @Test
@@ -64,7 +62,7 @@ public class ReadmillBookTests {
   }
 
   @Test
-  public void testConvertToJSON() throws JSONException, DatatypeConfigurationException {
+  public void testConvertToJSON() throws JSONException {
     // Set the expected values on the ReadmillBook object
     ReadmillBook book = new ReadmillBook();
 

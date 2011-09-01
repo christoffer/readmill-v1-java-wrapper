@@ -5,8 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import static junit.framework.Assert.assertEquals;
 
 public class UserTests {
@@ -75,8 +73,7 @@ public class UserTests {
   }
 
   @Test
-  public void testToConvertToJSON() throws JSONException,
-      DatatypeConfigurationException {
+  public void testToConvertToJSON() throws JSONException {
     ReadmillUser user = new ReadmillUser();
 
     user.setId(101);

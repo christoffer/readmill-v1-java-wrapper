@@ -5,8 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -17,7 +15,6 @@ public class BookAssetTests {
   @Test
   public void testDefault() throws JSONException {
     ReadmillBookAsset assets = new ReadmillBookAsset();
-
     // TODO change to empty string instead of null for String types
     assertEquals("vendor var", null, assets.getVendor());
     assertEquals("uri var", null, assets.getUri());
@@ -45,8 +42,7 @@ public class BookAssetTests {
   }
 
   @Test
-  public void testConvertToJSON() throws JSONException,
-      DatatypeConfigurationException {
+  public void testConvertToJSON() throws JSONException {
     ReadmillBookAsset assets = new ReadmillBookAsset();
 
     assets.setVendor("feedbooks");
