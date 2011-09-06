@@ -1,12 +1,12 @@
 package com.readmill.dal;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Abstract Readmill Entity. Requires implementations to implement fromJSON and toJSON for
@@ -100,6 +100,20 @@ public abstract class ReadmillEntity {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     df.setTimeZone(TimeZone.getTimeZone("UTC"));
     return df;
+  }
+  /**
+   * Handle the (broken) optString behavior in Android org.json.
+   * Android uses an older version of org.json which returns the literal string "null"
+   * when the string is null.
+   *
+   * Always use this instead of <jsonObject>.optString()
+   *
+   * @param json JSONObject to extract key from
+   * @param key Key to extract
+   * @return The correct string value, or an empty string if not set
+   */
+  protected String getString(JSONObject json, String key) {
+    return json.isNull(key) ? "" : json.optString(key);
   }
 
 }

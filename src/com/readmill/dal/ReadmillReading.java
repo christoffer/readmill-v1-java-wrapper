@@ -1,9 +1,9 @@
 package com.readmill.dal;
 
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * @author Christoffer
@@ -228,19 +228,19 @@ public class ReadmillReading extends ReadmillEntity {
 		isPrivate = json.optBoolean("private");
 		state = json.optInt("state");
 		recommended = json.optBoolean("recommended");
-		closingRemark = json.optString("closing_remark", "");
-		abandonedAt = parseUTC(json.optString("abandoned_at", ""));
-		finishedAt = parseUTC(json.optString("finished_at", ""));
-		createdAt = parseUTC(json.optString("created_at", ""));
-		touchedAt = parseUTC(json.optString("touched_at", ""));
-		startedAt = parseUTC(json.optString("started_at", ""));
-		duration = json.optString("duration");
-		locations = json.optString("locations");
-		permalinkUrl = json.optString("permalink_url");
-		uri = json.optString("uri");
-		periods = json.optString("periods");
-		highlights = json.optString("highlights");
-		averagePeriodTime = json.optString("average_period_time");
+		closingRemark = getString(json, "closing_remark");
+		abandonedAt = parseUTC(getString(json, "abandoned_at"));
+		finishedAt = parseUTC(getString(json, "finished_at"));
+		createdAt = parseUTC(getString(json, "created_at"));
+		touchedAt = parseUTC(getString(json, "touched_at"));
+		startedAt = parseUTC(getString(json, "started_at"));
+		duration = getString(json, "duration");
+		locations = getString(json, "locations");
+		permalinkUrl = getString(json, "permalink_url");
+		uri = getString(json, "uri");
+		periods = getString(json, "periods");
+		highlights = getString(json, "highlights");
+		averagePeriodTime = getString(json, "average_period_time");
 
     JSONObject jsonUser = json.optJSONObject("user");
 		user = jsonUser == null ? new ReadmillUser() : new ReadmillUser(jsonUser);

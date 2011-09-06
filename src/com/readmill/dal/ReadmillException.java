@@ -2,6 +2,8 @@ package com.readmill.dal;
 
 
 public class ReadmillException extends Exception {
+  private static final long serialVersionUID = 7135772463808664934L;
+
   public static final int STATUS_UNDEFINED = -1;
 
   private int mServerResponseCode = STATUS_UNDEFINED;

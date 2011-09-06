@@ -193,25 +193,25 @@ public class ReadmillUser extends ReadmillEntity {
   @Override
   public void convertFromJSON(JSONObject json) {
     id = json.optLong("id", -1);
-    userName = json.optString("username", "");
-    fullName = json.optString("fullname", "");
-    firstName = json.optString("firstname", "");
-    lastName = json.optString("lastname", "");
-    country = json.optString("country", "");
-    city = json.optString("city", "");
-    website = json.optString("website", "");
-    description = json.optString("description", "");
-    uri = json.optString("uri", "");
-    permalinkUrl = json.optString("permalink_url", "");
-    avatarUrl = json.optString("avatar_url", "");
+    userName = getString(json, "username");
+    fullName = getString(json, "fullname");
+    firstName = getString(json, "firstname");
+    lastName = getString(json, "lastname");
+    country = getString(json, "country");
+    city = getString(json, "city");
+    website = getString(json, "website");
+    description = getString(json, "description");
+    uri = getString(json, "uri");
+    permalinkUrl = getString(json, "permalink_url");
+    avatarUrl = getString(json, "avatar_url");
     booksInteresting = json.optLong("books_interesting", 0);
     booksOpen = json.optLong("books_open", 0);
     booksFinished = json.optLong("books_finished", 0);
     booksAbandoned = json.optLong("books_abandoned", 0);
     followers = json.optLong("followers");
     followings = json.optLong("followings");
-    email = json.optString("email", "");
-    readings = json.optString("readings", "");
+    email = getString(json, "email");
+    readings = getString(json, "readings");
   }
 
   /**

@@ -1,11 +1,11 @@
 package com.readmill.dal;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -132,16 +132,16 @@ public class ReadmillBook extends ReadmillEntity {
 		assets = new ArrayList<ReadmillBookAsset>();
 
 		id = json.optLong("id", -1);
-		title = json.optString("title", "");
-		author = json.optString("author", "");
-		coverURL = json.optString("cover_url", "");
-		isbn = json.optString("isbn", "");
-		story = json.optString("story", "");
-		publishedAt = parseUTC(json.optString("published_at", ""));
-		language = json.optString("language", "");
-		permalink = json.optString("permalink", "");
-		permalinkURL = json.optString("permalink_url", "");
-		uri = json.optString("uri", "");
+		title = getString(json, "title");
+		author = getString(json, "author");
+		coverURL = getString(json, "cover_url");
+		isbn = getString(json, "isbn");
+		story = getString(json, "story");
+		publishedAt = parseUTC(getString(json, "published_at"));
+		language = getString(json, "language");
+		permalink = getString(json, "permalink");
+		permalinkURL = getString(json, "permalink_url");
+		uri = getString(json, "uri");
 
     JSONArray jsonAssets = json.optJSONArray("assets");
 		if (jsonAssets != null) {

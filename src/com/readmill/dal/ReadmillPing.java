@@ -1,9 +1,9 @@
 package com.readmill.dal;
 
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  *
@@ -73,10 +73,10 @@ public class ReadmillPing extends ReadmillEntity {
    */
   @Override public void convertFromJSON(JSONObject json) {
     readingId = json.optLong("reading_id", 0);
-    identifier = json.optString("identifier", "");
+    identifier = getString(json, "identifier");
     progress = json.optLong("progress", 0);
     duration = json.optLong("duration", 0);
-    occurredAt = parseUTC(json.optString("occurred_at", ""));
+    occurredAt = parseUTC(getString(json, "occurred_at"));
   }
 
   /**

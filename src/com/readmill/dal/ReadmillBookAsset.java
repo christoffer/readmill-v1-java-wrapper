@@ -58,8 +58,8 @@ public class ReadmillBookAsset extends ReadmillEntity {
    */
   @Override
   protected void convertFromJSON(JSONObject json) {
-    vendor = json.optString("vendor");
-    uri = json.optString("uri");
+    vendor = getString(json, "vendor");
+    uri = getString(json, "uri");
     acquisitionType = json.optInt("acquisition_type");
   }
 
