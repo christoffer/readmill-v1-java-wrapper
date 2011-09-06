@@ -1,19 +1,26 @@
 package com.readmill.dal;
 
-import com.readmill.api.*;
-import com.readmill.api.ReadmillAPI.TokenStateListener;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.readmill.api.ApiWrapper;
+import com.readmill.api.Endpoints;
+import com.readmill.api.Env;
+import com.readmill.api.Http;
+import com.readmill.api.Params;
+import com.readmill.api.ReadmillAPI.TokenStateListener;
+import com.readmill.api.Request;
+import com.readmill.api.Token;
 
 
 public class ReadmillDAL {
@@ -51,6 +58,10 @@ public class ReadmillDAL {
 
   public String getAuthorizeURL() {
     return mWrapper.authorizationCodeUrl().toString();
+  }
+
+  public Env getEnvironment() {
+    return mWrapper.env;
   }
 
   public void addTokenStateChangeListener(TokenStateListener listener) {
