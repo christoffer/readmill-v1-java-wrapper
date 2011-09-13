@@ -25,7 +25,9 @@ public abstract class ReadmillEntity {
     convertFromJSON(json);
   }
 
-  public ReadmillEntity() {}
+  public ReadmillEntity() {
+    convertFromJSON(new JSONObject());
+  }
 
   /**
    * @return True if this entity has a set ID, false otherwise
@@ -91,7 +93,7 @@ public abstract class ReadmillEntity {
 
   public String toUTC(Date date) {
     if(date == null) {
-      return "null";
+      return "";
     }
     return utcDateFormat.format(date);
   }

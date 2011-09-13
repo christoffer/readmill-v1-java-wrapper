@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
     ReadmillBookTests.class,
     PingTests.class,
     ReadingTests.class,
+    ReadingPeriodTests.class,
     UserTests.class,
     EntityTests.class
 })

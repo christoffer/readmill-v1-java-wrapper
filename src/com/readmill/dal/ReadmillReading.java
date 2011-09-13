@@ -10,9 +10,9 @@ import org.json.JSONObject;
  */
 public class ReadmillReading extends ReadmillEntity {
 
-	private long estimatedTimeLeft = 0;
-	private double progress = 0.0;
-	private boolean isPrivate = false;
+	private long estimatedTimeLeft;
+	private double progress;
+	private boolean isPrivate;
 	private int state; // = 1; //eller 0? if state has a default value, test goes
 						// wrong
 	private boolean recommended;
@@ -24,13 +24,14 @@ public class ReadmillReading extends ReadmillEntity {
 	private Date touchedAt;
 	private Date startedAt;
 
-	private String duration;
+	private long duration;
+	private double averagePeriodTime;
+
 	private String locations;
 	private String permalinkUrl;
 	private String uri;
 	private String periods;
 	private String highlights;
-	private String averagePeriodTime;
 
 	private ReadmillUser user;
 	private ReadmillBook book;
@@ -145,11 +146,11 @@ public class ReadmillReading extends ReadmillEntity {
 		this.startedAt = startedAt;
 	}
 
-	public String getDuration() {
+	public long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
+	public void setDuration(long duration) {
 		this.duration = duration;
 	}
 
@@ -193,11 +194,11 @@ public class ReadmillReading extends ReadmillEntity {
 		this.highlights = highlights;
 	}
 
-	public String getAveragePeriodTime() {
+	public double getAveragePeriodTime() {
 		return averagePeriodTime;
 	}
 
-	public void setAveragePeriodTime(String averagePeriodTime) {
+	public void setAveragePeriodTime(double averagePeriodTime) {
 		this.averagePeriodTime = averagePeriodTime;
 	}
 
@@ -223,24 +224,24 @@ public class ReadmillReading extends ReadmillEntity {
 	@Override
 	public void convertFromJSON(JSONObject json) {
     id = json.optLong("id", -1);
-		estimatedTimeLeft = json.optLong("estimated_time_left", 0);
-		progress = json.optDouble("progress");
-		isPrivate = json.optBoolean("private");
-		state = json.optInt("state");
-		recommended = json.optBoolean("recommended");
+		estimatedTimeLeft = json.optLong("estimated_time_left");
+		progress = json.optDouble("progress", 0.0);
+		isPrivate = json.optBoolean("private", false);
+		state = json.optInt("state", State.OPEN);
+		recommended = json.optBoolean("recommended", false);
 		closingRemark = getString(json, "closing_remark");
 		abandonedAt = parseUTC(getString(json, "abandoned_at"));
 		finishedAt = parseUTC(getString(json, "finished_at"));
 		createdAt = parseUTC(getString(json, "created_at"));
 		touchedAt = parseUTC(getString(json, "touched_at"));
 		startedAt = parseUTC(getString(json, "started_at"));
-		duration = getString(json, "duration");
+		duration = json.optLong("duration");
 		locations = getString(json, "locations");
 		permalinkUrl = getString(json, "permalink_url");
 		uri = getString(json, "uri");
 		periods = getString(json, "periods");
 		highlights = getString(json, "highlights");
-		averagePeriodTime = getString(json, "average_period_time");
+		averagePeriodTime = json.optDouble("average_period_time", 0.0);
 
     JSONObject jsonUser = json.optJSONObject("user");
 		user = jsonUser == null ? new ReadmillUser() : new ReadmillUser(jsonUser);

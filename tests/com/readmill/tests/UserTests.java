@@ -16,24 +16,24 @@ public class UserTests {
     ReadmillUser user = new ReadmillUser();
 
     assertEquals("id: ", -1, user.getId());
-    assertEquals("username: ", null, user.getUserName());
-    assertEquals("fullname: ", null, user.getFullName());
-    assertEquals("avatarUrl: ", null, user.getAvatarUrl());
-    assertEquals("firstname: ", null, user.getFirstName());
-    assertEquals("lastname: ", null, user.getLastName());
-    assertEquals("country: ", null, user.getCountry());
-    assertEquals("city: ", null, user.getCity());
-    assertEquals("website: ", null, user.getWebsite());
-    assertEquals("description: ", null, user.getDescription());
-    assertEquals("uri", null, user.getUri());
-    assertEquals("permalinkUrl: ", null, user.getPermalinkUrl());
+    assertEquals("username: ", "", user.getUserName());
+    assertEquals("fullname: ", "", user.getFullName());
+    assertEquals("avatarUrl: ", "", user.getAvatarUrl());
+    assertEquals("firstname: ", "", user.getFirstName());
+    assertEquals("lastname: ", "", user.getLastName());
+    assertEquals("country: ", "", user.getCountry());
+    assertEquals("city: ", "", user.getCity());
+    assertEquals("website: ", "", user.getWebsite());
+    assertEquals("description: ", "", user.getDescription());
+    assertEquals("uri", "", user.getUri());
+    assertEquals("permalinkUrl: ", "", user.getPermalinkUrl());
     assertEquals("booksInteresting: ", 0, user.getBooksInteresting());
     assertEquals("booksOpen: ", 0, user.getBooksOpen());
     assertEquals("booksFinished: ", 0, user.getBooksFinished());
     assertEquals("booksAbandoned: ", 0, user.getBooksAbandoned());
-    assertEquals("readings: ", null, user.getReadings());
+    assertEquals("readings: ", "", user.getReadings());
     assertEquals("followings: ", 0, user.getFollowings());
-    assertEquals("email: ", null, user.getEmail());
+    assertEquals("email: ", "", user.getEmail());
 
   }
 

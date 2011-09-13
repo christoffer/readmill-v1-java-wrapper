@@ -1,14 +1,15 @@
 package com.readmill.tests;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillBookAsset;
+import static junit.framework.Assert.assertEquals;
+
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import static junit.framework.Assert.assertEquals;
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillBookAsset;
 
 public class ReadmillBookTests {
 
@@ -19,16 +20,16 @@ public class ReadmillBookTests {
 
     // TODO change to empty strings instead of nulls for String values
     assertEquals("id var", -1, book.getId());
-    assertEquals("title var", null, book.getTitle());
-    assertEquals("author var", null, book.getAuthor());
-    assertEquals("coverURL var", null, book.getCoverURL());
-    assertEquals("isbn var", null, book.getISBN());
-    assertEquals("story var", null, book.getStory());
+    assertEquals("title var", "", book.getTitle());
+    assertEquals("author var", "", book.getAuthor());
+    assertEquals("coverURL var", "", book.getCoverURL());
+    assertEquals("isbn var", "", book.getISBN());
+    assertEquals("story var", "", book.getStory());
     assertEquals("publishedAt var", null, book.getPublishedAt());
-    assertEquals("language var", null, book.getLanguage());
-    assertEquals("permalink var", null, book.getPermalink());
-    assertEquals("permalinkURL var", null, book.getPermalinkURL());
-    assertEquals("uri var", null, book.getURI());
+    assertEquals("language var", "", book.getLanguage());
+    assertEquals("permalink var", "", book.getPermalink());
+    assertEquals("permalinkURL var", "", book.getPermalinkURL());
+    assertEquals("uri var", "", book.getURI());
     assertEquals("assets array", new ArrayList<ReadmillBookAsset>(), book.getAssets());
   }
 

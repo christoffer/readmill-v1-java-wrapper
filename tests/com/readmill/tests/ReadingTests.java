@@ -1,15 +1,16 @@
 package com.readmill.tests;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillReading;
-import com.readmill.dal.ReadmillUser;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillReading;
+import com.readmill.dal.ReadmillUser;
 
 public class ReadingTests {
 
@@ -18,24 +19,24 @@ public class ReadingTests {
     ReadmillReading reading = new ReadmillReading();
 
     assertEquals("id: ", -1, reading.getId());
-    assertEquals("state: ", 0, reading.getState());
-    assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
+    assertEquals("state: ", ReadmillReading.State.OPEN, reading.getState());
     assertEquals("progress ", 0.0, reading.getProgress(), 0.0001);
     assertEquals("recommended: ", false, reading.isRecommended());
     assertEquals("is private: ", false, reading.isPrivate());
-    assertEquals("closing remark: ", null, reading.getClosingRemark());
+    assertEquals("closing remark: ", "", reading.getClosingRemark());
     assertEquals("abandonedAt: ", null, reading.getAbandonedAt());
     assertEquals("finishedAt: ", null, reading.getFinishedAt());
     assertEquals("createdAt: ", null, reading.getCreatedAt());
     assertEquals("touchedAt; ", null, reading.getTouchedAt());
     assertEquals("startedAt: ", null, reading.getStartedAt());
-    assertEquals("duration: ", null, reading.getDuration());
-    assertEquals("locations: ", null, reading.getLocations());
-    assertEquals("permalinkUrl; ", null, reading.getPermalinkUrl());
-    assertEquals("uri: ", null, reading.getUri());
-    assertEquals("periods: ", null, reading.getPeriods());
-    assertEquals("highlights: ", null, reading.getHighlights());
-    assertEquals("average period time: ", null, reading.getAveragePeriodTime());
+    assertEquals("duration: ", 0, reading.getDuration());
+    assertEquals("locations: ", "", reading.getLocations());
+    assertEquals("permalinkUrl; ", "", reading.getPermalinkUrl());
+    assertEquals("uri: ", "", reading.getUri());
+    assertEquals("periods: ", "", reading.getPeriods());
+    assertEquals("highlights: ", "", reading.getHighlights());
+    assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
+    assertEquals("average period time: ", 0.0, reading.getAveragePeriodTime(), 0.0001);
 
     // TODO Imeplement actual tests for the objects below
     // book
@@ -54,7 +55,7 @@ public class ReadingTests {
     assertEquals(21, reading.getId());
     assertEquals("state: ", 3, reading.getState());
     assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
-    assertEquals("progress ", 0.0, reading.getProgress(), 0.0001);
+    assertEquals("progress ", 1.0, reading.getProgress(), 0.0001);
     assertEquals("recommended: ", false, reading.isRecommended());
     assertEquals("is private: ", false, reading.isPrivate());
     assertEquals("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.", reading.getClosingRemark());
@@ -63,13 +64,13 @@ public class ReadingTests {
     assertEquals("createdAt: ", "2010-11-29T20:25:56Z", reading.toUTC(reading.getCreatedAt()));
     assertEquals("touchedAt; ", "2010-12-14T10:36:21Z", reading.toUTC(reading.getTouchedAt()));
     assertEquals("startedAt: ", "2010-11-29T20:25:56Z", reading.toUTC(reading.getStartedAt()));
-    assertEquals("duration: ", "25500", reading.getDuration());
+    assertEquals("duration: ", 25500, reading.getDuration());
     assertEquals("locations: ", "http://api.readmill.com/readings/21/locations", reading.getLocations());
     assertEquals("permalinkUrl; ", "http://readmill.com/henrik/reads/the-facebook-effect", reading.getPermalinkUrl());
     assertEquals("uri: ", "http://api.readmill.com/readings/21", reading.getUri());
     assertEquals("periods: ", "http://api.readmill.com/readings/21/periods", reading.getPeriods());
     assertEquals("highlights: ", "http://api.readmill.com/readings/21/highlights", reading.getHighlights());
-    assertEquals("average period time: ", "5100.0", reading.getAveragePeriodTime());
+    assertEquals("average period time: ", 5100.0, reading.getAveragePeriodTime());
 
     // book
     ReadmillBook book = reading.getBook();
@@ -87,21 +88,21 @@ public class ReadingTests {
   @Test// @Ignore
   public void testConvertToJSON() throws JSONException {
     ReadmillReading reading = new ReadmillReading();
-
+    String closingRemark = "The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto.";
     reading.setId(21);
     reading.setState(3);
     reading.setPrivate(false);
     reading.setRecommended(false);
-    reading.setClosingRemark("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.");
+    reading.setClosingRemark(closingRemark);
     reading.setTouchedAt(reading.parseUTC("2010-12-14T10:36:21Z"));
     reading.setStartedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
     reading.setFinishedAt(reading.parseUTC("2010-12-14T10:36:31Z"));
-    reading.setAbandonedAt(reading.parseUTC("null"));
+    reading.setAbandonedAt(null);
     reading.setCreatedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
-    reading.setDuration("25500");
+    reading.setDuration(25500);
     reading.setProgress(1.0);
     reading.setEstimatedTimeLeft(0);
-    reading.setAveragePeriodTime("5100.0");
+    reading.setAveragePeriodTime(5100.0);
     reading.setLocations("http://api.readmill.com/readings/21/locations");
     reading.setPermalinkUrl("http://readmill.com/henrik/reads/the-facebook-effect");
     reading.setUri("http://api.readmill.com/readings/21");
@@ -138,19 +139,19 @@ public class ReadingTests {
     assertFalse("recommended: ", json.optBoolean("recommended"));
     assertFalse("is private: ", json.optBoolean("private"));
 
-    assertEquals("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.", json.optString("closing_remark"));
-    assertEquals("abandonedAt: ", "null", json.optString("abandoned_at"));
+    assertEquals(closingRemark, json.optString("closing_remark"));
+    assertEquals("abandonedAt: ", "", json.optString("abandoned_at"));
     assertEquals("finishedAt: ", "2010-12-14T10:36:31Z", json.optString("finished_at"));
     assertEquals("createdAt: ", "2010-11-29T20:25:56Z", json.optString("created_at"));
     assertEquals("touchedAt; ", "2010-12-14T10:36:21Z", json.optString("touched_at"));
     assertEquals("startedAt: ", "2010-11-29T20:25:56Z", json.optString("started_at"));
-    assertEquals("duration: ", "25500", json.optString("duration"));
+    assertEquals("duration: ", 25500, json.optLong("duration"));
     assertEquals("locations: ", "http://api.readmill.com/readings/21/locations", json.optString("locations"));
     assertEquals("permalinkUrl; ", "http://readmill.com/henrik/reads/the-facebook-effect", json.optString("permalink_url"));
     assertEquals("uri: ", "http://api.readmill.com/readings/21", json.optString("uri"));
     assertEquals("periods: ", "http://api.readmill.com/readings/21/periods", json.optString("periods"));
     assertEquals("highlights: ", "http://api.readmill.com/readings/21/highlights", json.optString("highlights"));
-    assertEquals("average period time: ", "5100.0", json.optString("average_period_time"));
+    assertEquals("average period time: ", 5100.0, json.optDouble("average_period_time"), 0.0001);
 
     // should not include sub resources when converting to json
     assertNull("Does not include subresource user", json.optJSONObject("user"));

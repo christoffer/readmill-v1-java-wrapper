@@ -1,11 +1,12 @@
 package com.readmill.tests;
 
-import com.readmill.dal.ReadmillPing;
+import static junit.framework.Assert.assertEquals;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import com.readmill.dal.ReadmillPing;
 
 public class PingTests {
 
@@ -19,7 +20,7 @@ public class PingTests {
     ReadmillPing ping = new ReadmillPing();
 
     assertEquals("readingId: ", 0, ping.getReadingId());
-    assertEquals("identifier: ", null, ping.getIdentifier());
+    assertEquals("identifier: ", "", ping.getIdentifier());
     assertEquals("progress: ", 0, ping.getProgress());
     assertEquals("duration: ", 0, ping.getDuration());
     assertEquals("occurredAt: ", null, ping.getOccurredAt());

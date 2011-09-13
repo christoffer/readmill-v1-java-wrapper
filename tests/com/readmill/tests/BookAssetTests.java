@@ -1,11 +1,12 @@
 package com.readmill.tests;
 
-import com.readmill.dal.ReadmillBookAsset;
+import static junit.framework.Assert.assertEquals;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import com.readmill.dal.ReadmillBookAsset;
 
 /**
  * @author Lovisa
@@ -16,8 +17,8 @@ public class BookAssetTests {
   public void testDefault() throws JSONException {
     ReadmillBookAsset assets = new ReadmillBookAsset();
     // TODO change to empty string instead of null for String types
-    assertEquals("vendor var", null, assets.getVendor());
-    assertEquals("uri var", null, assets.getUri());
+    assertEquals("vendor var", "", assets.getVendor());
+    assertEquals("uri var", "", assets.getUri());
     assertEquals("acquisition_type var", 0, assets.getAcquisitionType());
   }
 
