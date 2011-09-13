@@ -13,18 +13,10 @@ public class ReadmillBookAsset extends ReadmillEntity {
   private String uri;
   private int acquisitionType; //TODO CHANGE!!
 
-  /**
-   * Constructor one
-   */
   public ReadmillBookAsset() {
     super();
   }
 
-  /**
-   * Constructor two
-   *
-   * @param json JSON Object to initialize from
-   */
   public ReadmillBookAsset(JSONObject json) {
     super(json);
   }
