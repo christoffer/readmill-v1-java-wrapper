@@ -108,6 +108,21 @@ public class ReadmillDAL {
     return getReading(String.format(Endpoints.READINGS, id));
   }
 
+  public ArrayList<ReadmillReadingPeriod> getReadingPeriods(String resourceURI) throws ReadmillException {
+    ArrayList<ReadmillReadingPeriod> periods = new ArrayList<ReadmillReadingPeriod>();
+    JSONArray jsonResult = getAssertedJSONArray(Request.to(toResourceURI(resourceURI)));
+
+    for (int i = 0; i < jsonResult.length(); i++) {
+      try {
+        ReadmillReadingPeriod period = new ReadmillReadingPeriod((JSONObject) jsonResult.get(i));
+        periods.add(period);
+      } catch (JSONException ignored) {
+        throw new ReadmillException();
+      }
+    }
+    return periods;
+  }
+
   /**
    * Fetch a book by URI
    *
