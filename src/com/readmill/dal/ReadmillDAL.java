@@ -309,9 +309,13 @@ public class ReadmillDAL {
   private String toResourceURI(String absoluteURI) {
     try {
       URI uri = new URI(absoluteURI);
-      return String.format("%s%s%s", uri.getPath(), uri.getQuery(), uri.getFragment());
+      return String.format("%s%s%s", _blankOr(uri.getPath()), _blankOr(uri.getQuery()), _blankOr(uri.getFragment()));
     } catch (Exception ignored) {}
     return absoluteURI;
+  }
+
+  private String _blankOr(String value) {
+    return value == null ? "" : value;
   }
 
   /**
