@@ -47,7 +47,7 @@ import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpRequestExecutor;
 
 public class ApiWrapper implements ReadmillAPI, Serializable {
-	private static final long serialVersionUID = 8095813939211459249L;
+	private static final long serialVersionUID = 8095813939211453249L;
 
 	/** The current environment */
 	public final Env env;
@@ -76,9 +76,13 @@ public class ApiWrapper implements ReadmillAPI, Serializable {
 			throw new IllegalArgumentException("need a code");
 		}
 
-		mToken = requestToken(Request.to(Endpoints.TOKEN).with("grant_type",
-				AUTHORIZATION_CODE, "client_id", mClientId, "client_secret",
-				mClientSecret, "redirect_uri", mRedirectUri, "code", code));
+		mToken = requestToken(Request.to(Endpoints.TOKEN)
+		    .with("grant_type", AUTHORIZATION_CODE,
+		          "client_id", mClientId,
+		          "client_secret", mClientSecret,
+		          "redirect_uri", mRedirectUri,
+		          "scope", "non-expiring",
+		          "code", code));
 		return mToken;
 	}
 
@@ -86,9 +90,11 @@ public class ApiWrapper implements ReadmillAPI, Serializable {
 	public Token refreshToken() throws IOException {
 		if (mToken == null || mToken.refresh == null)
 			throw new IllegalStateException("no refresh token available");
-		mToken = requestToken(Request.to(Endpoints.TOKEN).with("grant_type",
-				REFRESH_TOKEN, "client_id", mClientId, "client_secret",
-				mClientSecret, "refresh_token", mToken.refresh));
+		mToken = requestToken(Request.to(Endpoints.TOKEN)
+		    .with("grant_type", REFRESH_TOKEN,
+		          "client_id", mClientId,
+		          "client_secret", mClientSecret,
+		          "refresh_token", mToken.refresh));
 		return mToken;
 	}
 
