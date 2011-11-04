@@ -1,5 +1,8 @@
 package com.readmill.api;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.conn.params.ConnManagerPNames;
@@ -14,9 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
  * Helper class for various HTTP related functions.
  */
@@ -29,7 +29,7 @@ public class Http {
 
   /**
    * Returns a String representation of the response
-   * 
+   *
    * @param response
    *          an HTTP response
    * @return the content body
@@ -73,7 +73,7 @@ public class Http {
       throw new IOException("could not parse JSON document: " + (json.length() > 80 ? (json.substring(0, 79) + "...") : json));
     }
   }
-  
+
   public static JSONArray getJSONArray(HttpResponse response) throws IOException {
     final String json = Http.getString(response);
     if (json == null || json.length() == 0)
@@ -87,9 +87,7 @@ public class Http {
 
   /**
    * @return the default HttpParams
-   * @see <a
-   *      href="http://developer.android.com/reference/android/net/http/AndroidHttpClient.html#newInstance(java.lang.String, android.content.Context)">
-   *      android.net.http.AndroidHttpClient#newInstance(String, Context)</a>
+   * @see <a href="http://developer.android.com/reference/android/net/http/AndroidHttpClient.html#newInstance(java.lang.String, android.content.Context)">android.net.http.AndroidHttpClient#newInstance(String, Context)</a>
    */
   public static HttpParams defaultParams() {
     final HttpParams params = new BasicHttpParams();
