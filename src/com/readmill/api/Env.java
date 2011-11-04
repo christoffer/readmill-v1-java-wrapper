@@ -6,9 +6,9 @@ import org.apache.http.HttpHost;
  * The environment to operate against.
  */
 public enum Env {
-    LIVE("api.readmill.com", "readmill.com"),
-    STAGING("api.stage-readmill.com", "stage-readmill.com"),
-    LOCAL("api.readmill.local", "readmill.local");
+    LIVE("api.readmill.com", "m.readmill.com"),
+    STAGING("api.stage-readmill.com", "m.stage-readmill.com"),
+    LOCAL("api.readmill.local", "m.readmill.local");
 
     public final HttpHost apiHost, apiSSLHost, webHost, webSSLHost;
 

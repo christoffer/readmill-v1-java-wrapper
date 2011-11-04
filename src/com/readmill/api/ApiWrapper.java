@@ -112,14 +112,14 @@ public class ApiWrapper implements ReadmillAPI, Serializable {
 	@Override
 	public URI authorizationCodeUrl() {
 		return getURI(
-				Request.to(Endpoints.AUTHORIZE).with("redirect_uri",
-						mRedirectUri, "client_id", mClientId, "response_type",
-						"code", "mobile", "1"), false, false);
+				Request.to(Endpoints.AUTHORIZE)
+				  .with("redirect_uri", mRedirectUri,
+				        "client_id", mClientId,
+				        "response_type", "code"), false, false);
 	}
 
 	public URI getURI(Request request, boolean api, boolean secure) {
-		return URI
-				.create((api ? env.getApiHost(secure) : env.getWebHost(secure))
+		return URI.create((api ? env.getApiHost(secure) : env.getWebHost(secure))
 						.toURI()).resolve(request.toUrl());
 	}
 
