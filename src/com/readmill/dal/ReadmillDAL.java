@@ -1,26 +1,19 @@
 package com.readmill.dal;
 
-import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
-
+import com.readmill.api.*;
+import com.readmill.api.ReadmillAPI.TokenStateListener;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.readmill.api.ApiWrapper;
-import com.readmill.api.Endpoints;
-import com.readmill.api.Env;
-import com.readmill.api.Http;
-import com.readmill.api.Params;
-import com.readmill.api.ReadmillAPI.TokenStateListener;
-import com.readmill.api.Request;
-import com.readmill.api.Token;
+import java.io.IOException;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class ReadmillDAL {
@@ -124,6 +117,16 @@ public class ReadmillDAL {
   }
 
   /**
+   * Retrieve a Reading Period list by Reading id
+   * @param readingId Reading to fetch periods for
+   * @return list of Reading Periods
+   * @throws ReadmillException When fetching failed
+   */
+  public ArrayList<ReadmillReadingPeriod> getReadingPeriods(long readingId) throws ReadmillException {
+    return getReadingPeriods(String.format(Endpoints.PERIODS, readingId));
+  }
+
+  /**
    * Fetch a book by URI
    *
    * @param location URI to the book to fetch
@@ -202,7 +205,7 @@ public class ReadmillDAL {
    * @throws ReadmillException When the operation failed
    */
   public void postPing(String identifier, long readingId, double progress, long durationSeconds, Date occurredAt) throws ReadmillException {
-    Request request = Request.to(Endpoints.PING, readingId);
+    Request request = Request.to(Endpoints.PINGS, readingId);
 
     request.add(Params.Ping.IDENTIFIER, identifier);
     request.add(Params.Ping.PROGRESS, progress);

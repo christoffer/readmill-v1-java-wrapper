@@ -14,8 +14,9 @@ public interface Endpoints {
     String BOOKS               = "/books";
     String BOOK_SEARCH         = "/books";
     String BOOK_READINGS       = "/books/%d/readings";
-    
+
     // Reading
     String READINGS            = "/readings/%d";
-    String PING                = "/readings/%d/pings";
+    String PINGS               = "/readings/%d/pings";
+    String PERIODS             = "/readings/%d/periods";
 }
