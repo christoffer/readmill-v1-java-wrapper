@@ -1,40 +1,45 @@
 package com.readmill.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Base class for adding convenience methods to test cases
  *
  * @author christoffer
- *
  */
 
 public class TestUtils {
 
-	private static final String testResourcePath = "/com/readmill/tests/resources/";
+  /**
+   * Open a file from the support directory and return it's content.
+   *
+   * @param resourceName Name of the file in the support directory
+   * @return the file content or null if the file was missing
+   */
+  protected static String getResourceContent(String resourceName) {
+    String resourceDirectory = System.getenv("READMILL_RESOURCE_DIR");
+    if(resourceDirectory == null) {
+      throw new RuntimeException("Please set the environment variable READMILL_RESOURCE_DIR to the directory containing file \"" + resourceName + "\"");
+    }
 
-	/**
-	 * Open a file from the support directory and return it's content.
-	 *
-	 * @param resourceName Name of the file in the support directory
-	 * @return the file content or null if the file was missing
-	 */
-	protected static String getResourceContent(String resourceName) {
-	  String filePath = new File(testResourcePath, resourceName).getPath();
-		BufferedReader in = new BufferedReader(new InputStreamReader(TestUtils.class.getResourceAsStream(filePath)));
-		String content = "", line;
-		try {
-			while ((line = in.readLine()) != null) {
-				content += line;
-			}
-			in.close();
-			return content;
-		} catch (IOException e) {
-			return null;
-		}
-	}
+    FileInputStream fis;
+    try {
+      fis = new FileInputStream(new File(resourceDirectory, resourceName).getAbsolutePath());
+    } catch(FileNotFoundException e) {
+      throw new RuntimeException("Could not find the file \"" + resourceName + "\" in READMILL_RESOURCE_DIR: " + resourceDirectory);
+    }
+
+    BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+    String content = "", line;
+    try {
+      while((line = in.readLine()) != null) {
+        content += line;
+      }
+      in.close();
+      return content;
+    } catch(IOException e) {
+      return null;
+    }
+  }
 
 }

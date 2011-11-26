@@ -1,16 +1,15 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
-import java.util.Calendar;
-import java.util.TimeZone;
-
+import com.readmill.dal.ReadmillEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillEntity;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 public class EntityTests {
   ReadmillEntity instance = new DummyImplementation();

@@ -1,12 +1,11 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-
+import com.readmill.dal.ReadmillUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillUser;
+import static junit.framework.Assert.assertEquals;
 
 public class UserTests {
 

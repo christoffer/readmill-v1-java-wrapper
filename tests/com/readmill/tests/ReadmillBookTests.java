@@ -1,15 +1,14 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-
-import java.util.ArrayList;
-
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillBookAsset;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillBookAsset;
+import java.util.ArrayList;
+
+import static junit.framework.Assert.assertEquals;
 
 public class ReadmillBookTests {
 

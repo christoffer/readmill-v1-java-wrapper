@@ -1,12 +1,11 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-
+import com.readmill.dal.ReadmillBookAsset;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBookAsset;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * @author Lovisa
@@ -32,7 +31,7 @@ public class BookAssetTests {
 
   @Test
   public void testInitFromJSON() throws JSONException {
-    String mSampleResponse = com.readmill.tests.TestUtils.getResourceContent("sample_book_assets_data.json");
+    String mSampleResponse = TestUtils.getResourceContent("sample_book_assets_data.json");
 
     JSONObject json = new JSONObject(mSampleResponse);
     ReadmillBookAsset assets = new ReadmillBookAsset(json);

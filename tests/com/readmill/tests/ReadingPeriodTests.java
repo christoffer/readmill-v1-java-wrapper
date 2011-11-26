@@ -1,12 +1,11 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-
+import com.readmill.dal.ReadmillReadingPeriod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillReadingPeriod;
+import static junit.framework.Assert.assertEquals;
 
 
 /**
@@ -29,7 +28,7 @@ public class ReadingPeriodTests {
 
   @Test
   public void testInitFromJSON() throws JSONException {
-    String sampleResponse = com.readmill.tests.TestUtils.getResourceContent("sample_reading_period.json");
+    String sampleResponse = TestUtils.getResourceContent("sample_reading_period.json");
     JSONObject json = new JSONObject(sampleResponse);
     ReadmillReadingPeriod period = new ReadmillReadingPeriod(json);
 

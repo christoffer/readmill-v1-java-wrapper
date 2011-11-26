@@ -1,12 +1,11 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-
+import com.readmill.dal.ReadmillPing;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillPing;
+import static junit.framework.Assert.assertEquals;
 
 public class PingTests {
 

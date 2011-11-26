@@ -1,16 +1,13 @@
 package com.readmill.tests;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
-
+import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillReading;
+import com.readmill.dal.ReadmillUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.readmill.dal.ReadmillBook;
-import com.readmill.dal.ReadmillReading;
-import com.readmill.dal.ReadmillUser;
+import static junit.framework.Assert.*;
 
 public class ReadingTests {
 
