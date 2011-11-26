@@ -3,5 +3,4 @@ lib/
 .classpath
 .project
 .settings
-jar_manifest.jardesc
-ReadmillAPIWrapper.iml
+*.iml
