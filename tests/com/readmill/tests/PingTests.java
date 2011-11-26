@@ -1,5 +1,6 @@
 package com.readmill.tests;
 
+import com.readmill.dal.ReadmillEntity;
 import com.readmill.dal.ReadmillPing;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ public class PingTests {
    */
   @Test
   public void testDefaults() {
-    ReadmillPing ping = new ReadmillPing();
+    ReadmillPing ping = new ReadmillPing(null);
 
     assertEquals("readingId: ", 0, ping.getReadingId());
     assertEquals("identifier: ", "", ping.getIdentifier());
@@ -37,19 +38,19 @@ public class PingTests {
     assertEquals("identifier: ", "identify me!", ping.getIdentifier());
     assertEquals("progress: ", 14, ping.getProgress());
     assertEquals("duration: ", 4, ping.getDuration());
-    assertEquals("occurredAt: ", "2011-07-29T23:16:43Z", ping.toUTC(ping.getOccurredAt()));
+    assertEquals("occurredAt: ", "2011-07-29T23:16:43Z", ReadmillEntity.toISO8601(ping.getOccurredAt()));
 
   }
 
   @Test
   public void testConvertToJSON() throws JSONException {
-    ReadmillPing ping = new ReadmillPing();
+    ReadmillPing ping = new ReadmillPing(null);
 
     ping.setReadingId(19);
     ping.setIdentifier("identify me!");
     ping.setProgress(14);
     ping.setDuration(4);
-    ping.setOccurredAt(ping.parseUTC("2011-07-29T23:16:43Z"));
+    ping.setOccurredAt(ReadmillEntity.parseUTC("2011-07-29T23:16:43Z"));
 
     JSONObject json = new JSONObject(ping.toJSON());
 

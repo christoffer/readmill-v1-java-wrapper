@@ -2,6 +2,7 @@ package com.readmill.tests;
 
 import com.readmill.dal.ReadmillBook;
 import com.readmill.dal.ReadmillBookAsset;
+import com.readmill.dal.ReadmillEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class ReadmillBookTests {
   @Test
   public void testDefaults() {
 
-    ReadmillBook book = new ReadmillBook();
+    ReadmillBook book = new ReadmillBook(null);
 
     // TODO change to empty strings instead of nulls for String values
     assertEquals("id var", -1, book.getId());
@@ -45,7 +46,7 @@ public class ReadmillBookTests {
     assertEquals("coverURL var", "http://static.readmill.com/covers/800-medium.png", book.getCoverURL());
     assertEquals("isbn var", "9780554354088", book.getISBN());
     assertEquals("story var", "Stately- plump Buck Mulligan...", book.getStory());
-    assertEquals("publishedAt var", book.parseUTC("2008-08-18T23:16:43Z"), book.getPublishedAt());
+    assertEquals("publishedAt var", ReadmillEntity.parseUTC("2008-08-18T23:16:43Z"), book.getPublishedAt());
     assertEquals("language var", "en", book.getLanguage());
     assertEquals("permalink var", "ulysses", book.getPermalink());
     assertEquals("permalinkURL var", "http://readmill.com/books/ulysses", book.getPermalinkURL());
@@ -64,11 +65,11 @@ public class ReadmillBookTests {
   @Test
   public void testConvertToJSON() throws JSONException {
     // Set the expected values on the ReadmillBook object
-    ReadmillBook book = new ReadmillBook();
+    ReadmillBook book = new ReadmillBook(null);
 
     // This corresponding to the expected sample_book_data.json
-    ReadmillBookAsset first_asset = new ReadmillBookAsset();
-    ReadmillBookAsset second_asset = new ReadmillBookAsset();
+    ReadmillBookAsset first_asset = new ReadmillBookAsset(null);
+    ReadmillBookAsset second_asset = new ReadmillBookAsset(null);
 
     book.setId(9);
     book.setTitle("Ulysses");
@@ -76,7 +77,7 @@ public class ReadmillBookTests {
     book.setCoverURL("http://static.readmill.com/covers/800-medium.png");
     book.setISBN("9780554354088");
     book.setStory("Stately- plump Buck Mulligan...");
-    book.setPublishedAt(book.parseUTC("2008-08-18T23:16:43Z"));
+    book.setPublishedAt(ReadmillEntity.parseUTC("2008-08-18T23:16:43Z"));
     book.setLanguage("en");
     book.setPermalink("ulysses");
     book.setPermalinkURL("http://readmill.com/books/ulysses");

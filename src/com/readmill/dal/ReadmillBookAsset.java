@@ -13,10 +13,6 @@ public class ReadmillBookAsset extends ReadmillEntity {
   private String uri;
   private int acquisitionType; //TODO CHANGE!!
 
-  public ReadmillBookAsset() {
-    super();
-  }
-
   public ReadmillBookAsset(JSONObject json) {
     super(json);
   }

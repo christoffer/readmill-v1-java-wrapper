@@ -12,14 +12,14 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 public class EntityTests {
-  ReadmillEntity instance = new DummyImplementation();
+  ReadmillEntity instance = new DummyImplementation(null);
 
   @Test
   public void testParseUTC() {
     String validUTCString = "2009-08-21T09:11:21Z";
 
     Calendar cal = Calendar.getInstance();
-    cal.setTime(instance.parseUTC(validUTCString));
+    cal.setTime(ReadmillEntity.parseUTC(validUTCString));
 
     // Need to convert the calendar to UTC so we can compare with the string above
     // even when this test is run on computer with a different time zone
@@ -39,7 +39,7 @@ public class EntityTests {
 
   @Test
   public void testParseUTCWithInvalidString() {
-    assertEquals(null, instance.parseUTC("20090821T09:11:21Z")); // no dashes
+    assertEquals(null, ReadmillEntity.parseUTC("20090821T09:11:21Z")); // no dashes
   }
 
   @Test
@@ -56,12 +56,12 @@ public class EntityTests {
     cal.set(Calendar.MINUTE, 55);
     cal.set(Calendar.SECOND, 1);
 
-    assertEquals("2011-02-28T07:55:01Z", instance.toUTC(cal.getTime()));
+    assertEquals("2011-02-28T07:55:01Z", ReadmillEntity.toISO8601(cal.getTime()));
   }
 
   @Test
   public void testToUTCWithNull() {
-    assertEquals("", instance.toUTC(null));
+    assertEquals("", ReadmillEntity.toISO8601(null));
   }
 
   /**
@@ -71,6 +71,11 @@ public class EntityTests {
    * @author christoffer
    */
   class DummyImplementation extends ReadmillEntity {
+
+    public DummyImplementation(JSONObject json) {
+      super(json);
+    }
+
     @Override
     protected void convertFromJSON(JSONObject json) {}
 

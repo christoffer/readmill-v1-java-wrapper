@@ -1,35 +1,135 @@
 package com.readmill.dal;
 
+import com.readmill.api.Endpoints;
+import com.readmill.api.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ReadmillUser extends ReadmillEntity {
 
+  // User info
   private String userName;
   private String fullName;
-  private String avatarUrl;
   private String firstName;
   private String lastName;
+  private String description;
   private String country;
   private String city;
   private String website;
-  private String description;
+
+  // External resources
   private String uri;
+  private String avatarUrl;
   private String permalinkUrl;
+
+  // Book info
   private long booksInteresting;
   private long booksOpen;
   private long booksFinished;
   private long booksAbandoned;
-  private String readings;
+
+  // Follower counts
   private long followers;
   private long followings;
+
   private String email;
 
-  //permalink??
+  // Fetchable relations
+  // private List<ReadmillReading> readings;
+  private String readingsResourceUrl;
 
-  public ReadmillUser() {
-    super();
+  /**
+   * convertFromJSON
+   */
+  @Override
+  public void convertFromJSON(JSONObject json) {
+    id = json.optLong("id", -1);
+    userName = getString(json, "username");
+    fullName = getString(json, "fullname");
+    firstName = getString(json, "firstname");
+    lastName = getString(json, "lastname");
+    country = getString(json, "country");
+    city = getString(json, "city");
+    website = getString(json, "website");
+    description = getString(json, "description");
+    uri = getString(json, "uri");
+    permalinkUrl = getString(json, "permalink_url");
+    avatarUrl = getString(json, "avatar_url");
+    booksInteresting = json.optLong("books_interesting", 0);
+    booksOpen = json.optLong("books_open", 0);
+    booksFinished = json.optLong("books_finished", 0);
+    booksAbandoned = json.optLong("books_abandoned", 0);
+    followers = json.optLong("followers");
+    followings = json.optLong("followings");
+    email = getString(json, "email");
+    readingsResourceUrl = getString(json, "readings");
   }
+
+  /**
+   * convertToJSON
+   */
+  @Override
+  public JSONObject convertToJSON() throws JSONException {
+    JSONObject json = new JSONObject();
+
+    json.put("id", id);
+    json.put("username", userName);
+    json.put("fullname", fullName);
+    json.put("firstname", firstName);
+    json.put("lastname", lastName);
+    json.put("country", country);
+    json.put("city", city);
+    json.put("website", website);
+    json.put("description", description);
+    json.put("uri", uri);
+    json.put("permalink_url", permalinkUrl);
+    json.put("avatar_url", avatarUrl);
+    json.put("books_interesting", booksInteresting);
+    json.put("books_open", booksOpen);
+    json.put("books_finished", booksFinished);
+    json.put("books_abandoned", booksAbandoned);
+    json.put("followers", followers);
+    json.put("followings", followings);
+    json.put("email", email);
+    json.put("readings", readingsResourceUrl);
+
+    return json;
+  }
+
+  // DAL Methods
+
+  /**
+   * Return the user for the currently set token
+   *
+   * @return Current user
+   * @throws ReadmillException if there was an error fetching the user
+   */
+  public static ReadmillUser getCurrent() throws ReadmillException {
+    JSONObject data = getAssertedJSON(Request.to(Endpoints.ME));
+    return new ReadmillUser(data);
+  }
+
+  // Get readings
+  //  public ArrayList<ReadmillReading> getReadings() {
+  //
+  //  }
+
+  // Convenience
+
+  public String getShortName() {
+    if(firstName.length() > 0) {
+      return firstName;
+    }
+
+    if(userName.length() > 0) {
+      return userName;
+    }
+
+    return "";
+  }
+
+
+  // Getters and setters
 
   public ReadmillUser(JSONObject json) {
     super(json);
@@ -155,12 +255,12 @@ public class ReadmillUser extends ReadmillEntity {
     this.booksAbandoned = booksAbandoned;
   }
 
-  public String getReadings() {
-    return readings;
+  public String getReadingsResourceUrl() {
+    return readingsResourceUrl;
   }
 
-  public void setReadings(String readings) {
-    this.readings = readings;
+  public void setReadingsResourceUrl(String readingsResourceUrl) {
+    this.readingsResourceUrl = readingsResourceUrl;
   }
 
   public long getFollowers() {
@@ -187,73 +287,4 @@ public class ReadmillUser extends ReadmillEntity {
     this.email = email;
   }
 
-  /**
-   * convertFromJSON
-   */
-  @Override
-  public void convertFromJSON(JSONObject json) {
-    id = json.optLong("id", -1);
-    userName = getString(json, "username");
-    fullName = getString(json, "fullname");
-    firstName = getString(json, "firstname");
-    lastName = getString(json, "lastname");
-    country = getString(json, "country");
-    city = getString(json, "city");
-    website = getString(json, "website");
-    description = getString(json, "description");
-    uri = getString(json, "uri");
-    permalinkUrl = getString(json, "permalink_url");
-    avatarUrl = getString(json, "avatar_url");
-    booksInteresting = json.optLong("books_interesting", 0);
-    booksOpen = json.optLong("books_open", 0);
-    booksFinished = json.optLong("books_finished", 0);
-    booksAbandoned = json.optLong("books_abandoned", 0);
-    followers = json.optLong("followers");
-    followings = json.optLong("followings");
-    email = getString(json, "email");
-    readings = getString(json, "readings");
-  }
-
-  /**
-   * convertToJSON
-   */
-  @Override
-  public JSONObject convertToJSON() throws JSONException {
-    JSONObject json = new JSONObject();
-
-    json.put("id", id);
-    json.put("username", userName);
-    json.put("fullname", fullName);
-    json.put("firstname", firstName);
-    json.put("lastname", lastName);
-    json.put("country", country);
-    json.put("city", city);
-    json.put("website", website);
-    json.put("description", description);
-    json.put("uri", uri);
-    json.put("permalink_url", permalinkUrl);
-    json.put("avatar_url", avatarUrl);
-    json.put("books_interesting", booksInteresting);
-    json.put("books_open", booksOpen);
-    json.put("books_finished", booksFinished);
-    json.put("books_abandoned", booksAbandoned);
-    json.put("followers", followers);
-    json.put("followings", followings);
-    json.put("email", email);
-    json.put("readings", readings);
-
-    return json;
-  }
-
-  public String getShortName() {
-    if(firstName.length() > 0) {
-      return firstName;
-    }
-
-    if(userName.length() > 0) {
-      return userName;
-    }
-
-    return "";
-  }
 }

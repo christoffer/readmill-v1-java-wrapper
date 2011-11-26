@@ -1,9 +1,16 @@
 package com.readmill.dal;
 
-import java.util.Date;
-
+import com.readmill.api.Endpoints;
+import com.readmill.api.Params;
+import com.readmill.api.Request;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Christoffer
@@ -30,13 +37,16 @@ public class ReadmillReading extends ReadmillEntity {
 	private String locations;
 	private String permalinkUrl;
 	private String uri;
-	private String periods;
-	private String highlights;
+
+  // Resource Urls
+	private String periodsResourceUrl;
+	private String highlightResourceUrl;
 
 	private ReadmillUser user;
 	private ReadmillBook book;
 
 	// TODO permalink???
+
 
 	public static interface State {
 		int INTERESTING = 1;
@@ -50,13 +60,168 @@ public class ReadmillReading extends ReadmillEntity {
 		int PRIVATE = 1;
 	}
 
-	public ReadmillReading() {
-		super();
-	}
-
   public ReadmillReading(JSONObject json) {
     super(json);
   }
+
+  /**
+   * convertFromJSON
+   */
+  @Override
+  public void convertFromJSON(JSONObject json) {
+    id = json.optLong("id", -1);
+    estimatedTimeLeft = json.optLong("estimated_time_left");
+    progress = json.optDouble("progress", 0.0);
+    isPrivate = json.optBoolean("private", false);
+    state = json.optInt("state", State.OPEN);
+    recommended = json.optBoolean("recommended", false);
+    closingRemark = getString(json, "closing_remark");
+    abandonedAt = parseUTC(getString(json, "abandoned_at"));
+    finishedAt = parseUTC(getString(json, "finished_at"));
+    createdAt = parseUTC(getString(json, "created_at"));
+    touchedAt = parseUTC(getString(json, "touched_at"));
+    startedAt = parseUTC(getString(json, "started_at"));
+    duration = json.optLong("duration");
+    locations = getString(json, "locations");
+    permalinkUrl = getString(json, "permalink_url");
+    uri = getString(json, "uri");
+    periodsResourceUrl = getString(json, "periods");
+    highlightResourceUrl = getString(json, "highlights");
+    averagePeriodTime = json.optDouble("average_period_time", 0.0);
+
+    JSONObject jsonUser = json.optJSONObject("user");
+    user = new ReadmillUser(jsonUser);
+
+    JSONObject jsonBook = json.optJSONObject("book");
+    book = new ReadmillBook(jsonBook);
+
+  }
+
+  @Override
+  public JSONObject convertToJSON() {
+    JSONObject json = new JSONObject();
+    try {
+      json.put("id", id);
+      json.put("estimated_time_left", estimatedTimeLeft);
+      json.put("progress", progress);
+      json.put("closing_remark", closingRemark);
+      json.put("abandoned_at", toISO8601(abandonedAt));
+      json.put("finished_at", toISO8601(finishedAt));
+      json.put("created_at", toISO8601(createdAt));
+      json.put("touched_at", toISO8601(touchedAt));
+      json.put("started_at", toISO8601(startedAt));
+      json.put("estimated_time_left", estimatedTimeLeft);
+      json.put("duration", duration);
+      json.put("locations", locations);
+      json.put("permalink_url", permalinkUrl);
+      json.put("progress", progress);
+      json.put("uri", uri);
+      json.put("periods", periodsResourceUrl);
+      json.put("recommended", recommended);
+      json.put("private", isPrivate);
+      json.put("state", state);
+      json.put("highlights", highlightResourceUrl);
+      json.put("average_period_time", averagePeriodTime);
+    } catch (JSONException ignored) {
+    }
+    return json;
+  }
+
+  // DAL Methods
+
+  /**
+   * Retrieve a Readmill Reading by resource URI
+   *
+   * @param location resource URI
+   * @return Readmill Reading
+   * @throws ReadmillException When fetching the reading failed
+   */
+  public static ReadmillReading get(String location) throws ReadmillException {
+    JSONObject jsonReading = getAssertedJSON(Request.to(toResourceURI(location)));
+    return new ReadmillReading(jsonReading);
+  }
+
+  /**
+   * Retrieve a Readmill Reading by ID
+   *
+   * @param id resource ID
+   * @return Readmill Reading
+   * @throws ReadmillException When fetching the reading failed
+   */
+  public static ReadmillReading get(long id) throws ReadmillException {
+    return get(String.format(Endpoints.READINGS, id));
+  }
+
+  /**
+   * Return all readings for a given user
+   *
+   * @param userId Id of user to fetch all readings for
+   * @return A list of all readings for the given user (an empty list is return if the user could not be found)
+   */
+  public static ArrayList<ReadmillReading> getAllForUser(long userId) {
+    return null;
+  }
+
+  /**
+   * Create a new reading for the provided book
+   *
+   * @param book    ReadmillBook to create a reading for
+   * @param state   Reading state of the reading to create (ReadmillReading.State)
+   * @param privacy Privacy setting for the reading (ReadmillReading.Privacy)
+   * @return the created ReadmillReading
+   * @throws ReadmillException When the reading could not be created, or retrieving the created reading failed
+   */
+  public static ReadmillReading create(ReadmillBook book, int state, int privacy) throws ReadmillException {
+    Request request = Request.to(Endpoints.BOOK_READINGS, book.id);
+    request.add(Params.Reading.IS_PRIVATE, privacy);
+    request.add(Params.Reading.STATE, state);
+
+    try {
+      HttpResponse response = ReadmillDAL.getWrapper().post(request);
+
+      int statusCode = response.getStatusLine().getStatusCode();
+
+      if(statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_CONFLICT) {
+        String location = response.getFirstHeader("Location").getValue();
+        return get(location);
+      } else {
+        throw new ReadmillException(response.getStatusLine().getStatusCode());
+      }
+    } catch(IOException e) {
+      e.printStackTrace();
+      throw new ReadmillException();
+    }
+  }
+
+  /**
+   * Update the state of a Reading on the server
+   *
+   * @param reading Reading to update on Readmill
+   * @throws ReadmillException When the operation failed
+   */
+  public static void update(ReadmillReading reading) throws ReadmillException {
+    Request request = Request.to(Endpoints.READINGS, reading.id);
+
+    request.add(Params.Reading.STATE, reading.getState());
+    request.add(Params.Reading.IS_PRIVATE, reading.isPrivate() ? 1 : 0);
+
+    try {
+      HttpResponse response = ReadmillDAL.getWrapper().put(request);
+      assertResponseCode(HttpStatus.SC_OK, response);
+    } catch(IOException e) {
+      e.printStackTrace();
+    }
+  }
+  public void update() throws ReadmillException {
+    update(this);
+  }
+
+  // Relations
+  public ArrayList<ReadmillReadingPeriod> getPeriods() throws ReadmillException {
+    return null;
+  }
+
+  // Getters and setters
 
 	public long getEstimatedTimeLeft() {
 		return estimatedTimeLeft;
@@ -178,20 +343,20 @@ public class ReadmillReading extends ReadmillEntity {
 		this.uri = uri;
 	}
 
-	public String getPeriods() {
-		return periods;
+	public String getPeriodsResourceUrl() {
+		return periodsResourceUrl;
 	}
 
-	public void setPeriods(String periods) {
-		this.periods = periods;
+	public void setPeriodsResourceUrl(String periodsResourceUrl) {
+		this.periodsResourceUrl = periodsResourceUrl;
 	}
 
-	public String getHighlights() {
-		return highlights;
+	public String getHighlightResourceUrl() {
+		return highlightResourceUrl;
 	}
 
-	public void setHighlights(String highlights) {
-		this.highlights = highlights;
+	public void setHighlightResourceUrl(String highlightResourceUrl) {
+		this.highlightResourceUrl = highlightResourceUrl;
 	}
 
 	public double getAveragePeriodTime() {
@@ -218,67 +383,5 @@ public class ReadmillReading extends ReadmillEntity {
 		this.book = book;
 	}
 
-	/**
-	 * convertFromJSON
-	 */
-	@Override
-	public void convertFromJSON(JSONObject json) {
-    id = json.optLong("id", -1);
-		estimatedTimeLeft = json.optLong("estimated_time_left");
-		progress = json.optDouble("progress", 0.0);
-		isPrivate = json.optBoolean("private", false);
-		state = json.optInt("state", State.OPEN);
-		recommended = json.optBoolean("recommended", false);
-		closingRemark = getString(json, "closing_remark");
-		abandonedAt = parseUTC(getString(json, "abandoned_at"));
-		finishedAt = parseUTC(getString(json, "finished_at"));
-		createdAt = parseUTC(getString(json, "created_at"));
-		touchedAt = parseUTC(getString(json, "touched_at"));
-		startedAt = parseUTC(getString(json, "started_at"));
-		duration = json.optLong("duration");
-		locations = getString(json, "locations");
-		permalinkUrl = getString(json, "permalink_url");
-		uri = getString(json, "uri");
-		periods = getString(json, "periods");
-		highlights = getString(json, "highlights");
-		averagePeriodTime = json.optDouble("average_period_time", 0.0);
-
-    JSONObject jsonUser = json.optJSONObject("user");
-		user = jsonUser == null ? new ReadmillUser() : new ReadmillUser(jsonUser);
-
-    JSONObject jsonBook = json.optJSONObject("book");
-		book = jsonBook == null ? new ReadmillBook() : new ReadmillBook(jsonBook);
-
-	}
-
-	@Override
-	public JSONObject convertToJSON() {
-		JSONObject json = new JSONObject();
-		try {
-			json.put("id", id);
-			json.put("estimated_time_left", estimatedTimeLeft);
-			json.put("progress", progress);
-			json.put("closing_remark", closingRemark);
-			json.put("abandoned_at", toUTC(abandonedAt));
-			json.put("finished_at", toUTC(finishedAt));
-			json.put("created_at", toUTC(createdAt));
-			json.put("touched_at", toUTC(touchedAt));
-			json.put("started_at", toUTC(startedAt));
-			json.put("estimated_time_left", estimatedTimeLeft);
-			json.put("duration", duration);
-			json.put("locations", locations);
-			json.put("permalink_url", permalinkUrl);
-			json.put("progress", progress);
-			json.put("uri", uri);
-			json.put("periods", periods);
-			json.put("recommended", recommended);
-			json.put("private", isPrivate);
-			json.put("state", state);
-			json.put("highlights", highlights);
-			json.put("average_period_time", averagePeriodTime);
-		} catch (JSONException ignored) {
-		}
-		return json;
-	}
 
 }

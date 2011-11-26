@@ -1,11 +1,15 @@
 package com.readmill.dal;
 
-import java.util.Date;
-
+import com.readmill.api.Endpoints;
+import com.readmill.api.Request;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReadmillReadingPeriod extends ReadmillEntity  {
+import java.util.ArrayList;
+import java.util.Date;
+
+public class ReadmillReadingPeriod extends ReadmillEntity {
 
   private long readingId;
   private long userId;
@@ -15,10 +19,10 @@ public class ReadmillReadingPeriod extends ReadmillEntity  {
 
   // TODO locations
 
-  public ReadmillReadingPeriod() { super(); }
   public ReadmillReadingPeriod(JSONObject json) { super(json); }
 
-  @Override protected void convertFromJSON(JSONObject json) {
+  @Override
+  protected void convertFromJSON(JSONObject json) {
     id = json.optLong("id", -1);
     userId = json.optLong("user_id", -1);
     readingId = json.optLong("reading_id", -1);
@@ -27,25 +31,66 @@ public class ReadmillReadingPeriod extends ReadmillEntity  {
     duration = json.optLong("duration", 0);
   }
 
-  @Override protected JSONObject convertToJSON() throws JSONException {
+  @Override
+  protected JSONObject convertToJSON() throws JSONException {
     JSONObject json = new JSONObject();
 
     json.put("id", id);
     json.put("reading_id", readingId);
     json.put("user_id", userId);
-    json.put("started_at", toUTC(startedAt));
+    json.put("started_at", toISO8601(startedAt));
     json.put("progress", progress);
     json.put("duration", duration);
 
     return json;
   }
 
+  // DAL methods
 
+  /**
+   * Fetch all reading periods for a given reading
+   *
+   * @param resourceURI URI of reading to fetch periods for
+   * @return A list of all reading periods for that reading
+   * @throws ReadmillException
+   */
+  public static ArrayList<ReadmillReadingPeriod> getAllForReading(String resourceURI) throws ReadmillException {
+    ArrayList<ReadmillReadingPeriod> periods = new ArrayList<ReadmillReadingPeriod>();
+    JSONArray jsonResult = getAssertedJSONArray(Request.to(toResourceURI(resourceURI)));
 
-  // Access
-  // ======
+    for(int i = 0; i < jsonResult.length(); i++) {
+      try {
+        ReadmillReadingPeriod period = new ReadmillReadingPeriod((JSONObject) jsonResult.get(i));
+        periods.add(period);
+      } catch(JSONException ignored) {
+        throw new ReadmillException();
+      }
+    }
+    return periods;
+  }
 
+  /**
+   * Retrieve a Reading Period list by Reading id
+   *
+   * @param readingId Reading to fetch periods for
+   * @return list of Reading Periods
+   * @throws ReadmillException When fetching failed
+   */
+  public static ArrayList<ReadmillReadingPeriod> getAllForReading(long readingId) throws ReadmillException {
+    return getAllForReading(String.format(Endpoints.PERIODS, readingId));
+  }
 
+  // Relations
+
+  /**
+   * Return a list of all the Readings for the user
+   * @return
+   */
+  public ArrayList<ReadmillReading> getReadings() {
+    return null;
+  }
+
+  // Getters and setters
 
   public long getReadingId() {
     return readingId;
@@ -78,9 +123,11 @@ public class ReadmillReadingPeriod extends ReadmillEntity  {
   public void setProgress(double progress) {
     this.progress = progress;
   }
+
   public long getDuration() {
     return duration;
   }
+
   public void setDuration(long duration) {
     this.duration = duration;
   }

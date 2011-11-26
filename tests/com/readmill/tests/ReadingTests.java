@@ -1,6 +1,7 @@
 package com.readmill.tests;
 
 import com.readmill.dal.ReadmillBook;
+import com.readmill.dal.ReadmillEntity;
 import com.readmill.dal.ReadmillReading;
 import com.readmill.dal.ReadmillUser;
 import org.json.JSONException;
@@ -13,7 +14,7 @@ public class ReadingTests {
 
   @Test
   public void testDefaults() {
-    ReadmillReading reading = new ReadmillReading();
+    ReadmillReading reading = new ReadmillReading(null);
 
     assertEquals("id: ", -1, reading.getId());
     assertEquals("state: ", ReadmillReading.State.OPEN, reading.getState());
@@ -30,8 +31,8 @@ public class ReadingTests {
     assertEquals("locations: ", "", reading.getLocations());
     assertEquals("permalinkUrl; ", "", reading.getPermalinkUrl());
     assertEquals("uri: ", "", reading.getUri());
-    assertEquals("periods: ", "", reading.getPeriods());
-    assertEquals("highlights: ", "", reading.getHighlights());
+    assertEquals("periods: ", "", reading.getPeriodsResourceUrl());
+    assertEquals("highlights: ", "", reading.getHighlightResourceUrl());
     assertEquals("estimated time left: ", 0, reading.getEstimatedTimeLeft());
     assertEquals("average period time: ", 0.0, reading.getAveragePeriodTime(), 0.0001);
 
@@ -57,16 +58,16 @@ public class ReadingTests {
     assertEquals("is private: ", false, reading.isPrivate());
     assertEquals("The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto. Although, like all tech-books it slowed down towards the end. The last 100 pages was a fight.", reading.getClosingRemark());
     assertEquals("abandonedAt: ", null, reading.getAbandonedAt());
-    assertEquals("finishedAt: ", "2010-12-14T10:36:31Z", reading.toUTC(reading.getFinishedAt()));
-    assertEquals("createdAt: ", "2010-11-29T20:25:56Z", reading.toUTC(reading.getCreatedAt()));
-    assertEquals("touchedAt; ", "2010-12-14T10:36:21Z", reading.toUTC(reading.getTouchedAt()));
-    assertEquals("startedAt: ", "2010-11-29T20:25:56Z", reading.toUTC(reading.getStartedAt()));
+    assertEquals("finishedAt: ", "2010-12-14T10:36:31Z", ReadmillEntity.toISO8601(reading.getFinishedAt()));
+    assertEquals("createdAt: ", "2010-11-29T20:25:56Z", ReadmillEntity.toISO8601(reading.getCreatedAt()));
+    assertEquals("touchedAt; ", "2010-12-14T10:36:21Z", ReadmillEntity.toISO8601(reading.getTouchedAt()));
+    assertEquals("startedAt: ", "2010-11-29T20:25:56Z", ReadmillEntity.toISO8601(reading.getStartedAt()));
     assertEquals("duration: ", 25500, reading.getDuration());
     assertEquals("locations: ", "http://api.readmill.com/readings/21/locations", reading.getLocations());
     assertEquals("permalinkUrl; ", "http://readmill.com/henrik/reads/the-facebook-effect", reading.getPermalinkUrl());
     assertEquals("uri: ", "http://api.readmill.com/readings/21", reading.getUri());
-    assertEquals("periods: ", "http://api.readmill.com/readings/21/periods", reading.getPeriods());
-    assertEquals("highlights: ", "http://api.readmill.com/readings/21/highlights", reading.getHighlights());
+    assertEquals("periods: ", "http://api.readmill.com/readings/21/periods", reading.getPeriodsResourceUrl());
+    assertEquals("highlights: ", "http://api.readmill.com/readings/21/highlights", reading.getHighlightResourceUrl());
     assertEquals("average period time: ", 5100.0, reading.getAveragePeriodTime());
 
     // book
@@ -84,18 +85,18 @@ public class ReadingTests {
 
   @Test// @Ignore
   public void testConvertToJSON() throws JSONException {
-    ReadmillReading reading = new ReadmillReading();
+    ReadmillReading reading = new ReadmillReading(null);
     String closingRemark = "The stories about the early days of Thefacebook was really great, hearing about how they were hacking like crazy from that house in Palo Alto.";
     reading.setId(21);
     reading.setState(3);
     reading.setPrivate(false);
     reading.setRecommended(false);
     reading.setClosingRemark(closingRemark);
-    reading.setTouchedAt(reading.parseUTC("2010-12-14T10:36:21Z"));
-    reading.setStartedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
-    reading.setFinishedAt(reading.parseUTC("2010-12-14T10:36:31Z"));
+    reading.setTouchedAt(ReadmillEntity.parseUTC("2010-12-14T10:36:21Z"));
+    reading.setStartedAt(ReadmillEntity.parseUTC("2010-11-29T20:25:56Z"));
+    reading.setFinishedAt(ReadmillEntity.parseUTC("2010-12-14T10:36:31Z"));
     reading.setAbandonedAt(null);
-    reading.setCreatedAt(reading.parseUTC("2010-11-29T20:25:56Z"));
+    reading.setCreatedAt(ReadmillEntity.parseUTC("2010-11-29T20:25:56Z"));
     reading.setDuration(25500);
     reading.setProgress(1.0);
     reading.setEstimatedTimeLeft(0);
@@ -103,11 +104,11 @@ public class ReadingTests {
     reading.setLocations("http://api.readmill.com/readings/21/locations");
     reading.setPermalinkUrl("http://readmill.com/henrik/reads/the-facebook-effect");
     reading.setUri("http://api.readmill.com/readings/21");
-    reading.setPeriods("http://api.readmill.com/readings/21/periods");
-    reading.setHighlights("http://api.readmill.com/readings/21/highlights");
+    reading.setPeriodsResourceUrl("http://api.readmill.com/readings/21/periods");
+    reading.setHighlightResourceUrl("http://api.readmill.com/readings/21/highlights");
 
     // user
-    ReadmillUser user = new ReadmillUser();
+    ReadmillUser user = new ReadmillUser(null);
 
     user.setUserName("henrik");
     user.setFullName("Henrik Berggren");
@@ -116,7 +117,7 @@ public class ReadingTests {
     reading.setUser(user);
 
     // book
-    ReadmillBook book = new ReadmillBook();
+    ReadmillBook book = new ReadmillBook(null);
 
     book.setId(33);
     book.setAuthor("David Kirkpatrick");

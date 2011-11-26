@@ -14,7 +14,7 @@ public class BookAssetTests {
 
   @Test
   public void testDefault() throws JSONException {
-    ReadmillBookAsset assets = new ReadmillBookAsset();
+    ReadmillBookAsset assets = new ReadmillBookAsset(null);
     // TODO change to empty string instead of null for String types
     assertEquals("vendor var", "", assets.getVendor());
     assertEquals("uri var", "", assets.getUri());
@@ -43,7 +43,7 @@ public class BookAssetTests {
 
   @Test
   public void testConvertToJSON() throws JSONException {
-    ReadmillBookAsset assets = new ReadmillBookAsset();
+    ReadmillBookAsset assets = new ReadmillBookAsset(null);
 
     assets.setVendor("feedbooks");
     assets.setUri("http://www.feedbooks.com/book/1232.epub");

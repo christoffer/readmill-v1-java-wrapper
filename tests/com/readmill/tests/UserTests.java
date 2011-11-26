@@ -12,7 +12,7 @@ public class UserTests {
   @Test
   public void testDefault() throws JSONException {
 
-    ReadmillUser user = new ReadmillUser();
+    ReadmillUser user = new ReadmillUser(null);
 
     assertEquals("id: ", -1, user.getId());
     assertEquals("username: ", "", user.getUserName());
@@ -30,7 +30,7 @@ public class UserTests {
     assertEquals("booksOpen: ", 0, user.getBooksOpen());
     assertEquals("booksFinished: ", 0, user.getBooksFinished());
     assertEquals("booksAbandoned: ", 0, user.getBooksAbandoned());
-    assertEquals("readings: ", "", user.getReadings());
+    assertEquals("readings: ", "", user.getReadingsResourceUrl());
     assertEquals("followings: ", 0, user.getFollowings());
     assertEquals("email: ", "", user.getEmail());
 
@@ -66,7 +66,7 @@ public class UserTests {
     assertEquals("booksAbandoned: ", 0, user.getBooksAbandoned());
     assertEquals("readings: ",
         "http://api.readmill.com/users/101/readings",
-        user.getReadings());
+        user.getReadingsResourceUrl());
     assertEquals("followers: ", 2, user.getFollowers());
     assertEquals("followings: ", 2, user.getFollowings());
     assertEquals("email: ", "no@spam.plz", user.getEmail());
@@ -74,7 +74,7 @@ public class UserTests {
 
   @Test
   public void testToConvertToJSON() throws JSONException {
-    ReadmillUser user = new ReadmillUser();
+    ReadmillUser user = new ReadmillUser(null);
 
     user.setId(101);
     user.setUserName("jensnockert");
@@ -93,7 +93,7 @@ public class UserTests {
     user.setBooksOpen(1);
     user.setBooksFinished(0);
     user.setBooksAbandoned(0);
-    user.setReadings("http://api.readmill.com/users/101/readings");
+    user.setReadingsResourceUrl("http://api.readmill.com/users/101/readings");
     user.setFollowers(2);
     user.setFollowings(2);
     user.setEmail("no@spam.plz");
