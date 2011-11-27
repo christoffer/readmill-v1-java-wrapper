@@ -5,6 +5,8 @@ import com.readmill.api.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ReadmillUser extends ReadmillEntity {
 
   // User info
@@ -109,10 +111,11 @@ public class ReadmillUser extends ReadmillEntity {
     return new ReadmillUser(data);
   }
 
-  // Get readings
-  //  public ArrayList<ReadmillReading> getReadings() {
-  //
-  //  }
+  // Relations
+
+  public ArrayList<ReadmillReading> getReadings() throws ReadmillException {
+    return ReadmillReading.getAllForUser(getId());
+  }
 
   // Convenience
 

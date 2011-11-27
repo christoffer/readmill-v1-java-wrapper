@@ -5,6 +5,7 @@ import com.readmill.api.Params;
 import com.readmill.api.Request;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -158,8 +159,20 @@ public class ReadmillReading extends ReadmillEntity {
    * @param userId Id of user to fetch all readings for
    * @return A list of all readings for the given user (an empty list is return if the user could not be found)
    */
-  public static ArrayList<ReadmillReading> getAllForUser(long userId) {
-    return null;
+  public static ArrayList<ReadmillReading> getAllForUser(long userId) throws ReadmillException {
+    ArrayList<ReadmillReading> readingsForUser = new ArrayList<ReadmillReading>();
+    String uri = String.format(Endpoints.USER_READINGS, userId);
+    JSONArray jsonResult = getAssertedJSONArray(Request.to(toResourceURI(uri)));
+
+    for(int i = 0; i < jsonResult.length(); i++) {
+      try {
+        ReadmillReading reading = new ReadmillReading((JSONObject) jsonResult.get(i));
+        readingsForUser.add(reading);
+      } catch(JSONException ignored) {
+        throw new ReadmillException("Failed to parse JSON object: " + ignored.getMessage());
+      }
+    }
+    return readingsForUser;
   }
 
   /**
