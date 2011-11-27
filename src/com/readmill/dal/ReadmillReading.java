@@ -178,14 +178,15 @@ public class ReadmillReading extends ReadmillEntity {
   /**
    * Create a new reading for the provided book
    *
-   * @param book    ReadmillBook to create a reading for
+   * @param bookId  Id of the Readmill book to create a reading for
    * @param state   Reading state of the reading to create (ReadmillReading.State)
    * @param privacy Privacy setting for the reading (ReadmillReading.Privacy)
    * @return the created ReadmillReading
    * @throws ReadmillException When the reading could not be created, or retrieving the created reading failed
    */
-  public static ReadmillReading create(ReadmillBook book, int state, int privacy) throws ReadmillException {
-    Request request = Request.to(Endpoints.BOOK_READINGS, book.id);
+  public static ReadmillReading create(long bookId, int state, int privacy) throws ReadmillException {
+    Request request = Request.to(Endpoints.BOOK_READINGS, bookId);
+
     request.add(Params.Reading.IS_PRIVATE, privacy);
     request.add(Params.Reading.STATE, state);
 
