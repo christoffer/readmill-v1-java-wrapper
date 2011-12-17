@@ -1,30 +1,10 @@
 package com.readmill.api;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.http.ConnectionReuseStrategy;
-import org.apache.http.Header;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.*;
 import org.apache.http.auth.AUTH;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.client.AuthenticationHandler;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.HttpRequestRetryHandler;
-import org.apache.http.client.RedirectHandler;
-import org.apache.http.client.RequestDirector;
-import org.apache.http.client.UserTokenHandler;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.*;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.ClientConnectionManager;
@@ -45,6 +25,13 @@ import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpRequestExecutor;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ApiWrapper implements ReadmillAPI, Serializable {
 	private static final long serialVersionUID = 8095813939211453249L;
