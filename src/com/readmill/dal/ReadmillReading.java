@@ -51,7 +51,7 @@ public class ReadmillReading extends ReadmillEntity {
 
 	public static interface State {
 		int INTERESTING = 1;
-		int OPEN = 2;
+		int READING = 2;
 		int FINISHED = 3;
 		int ABANDONED = 4;
 	}
@@ -74,7 +74,7 @@ public class ReadmillReading extends ReadmillEntity {
     estimatedTimeLeft = json.optLong("estimated_time_left");
     progress = json.optDouble("progress", 0.0);
     isPrivate = json.optBoolean("private", false);
-    state = json.optInt("state", State.OPEN);
+    state = json.optInt("state", State.READING);
     recommended = json.optBoolean("recommended", false);
     closingRemark = getString(json, "closing_remark");
     abandonedAt = parseUTC(getString(json, "abandoned_at"));
