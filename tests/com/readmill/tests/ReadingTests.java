@@ -17,7 +17,7 @@ public class ReadingTests {
     ReadmillReading reading = new ReadmillReading(null);
 
     assertEquals("id: ", -1, reading.getId());
-    assertEquals("state: ", ReadmillReading.State.OPEN, reading.getState());
+    assertEquals("state: ", ReadmillReading.State.READING, reading.getState());
     assertEquals("progress ", 0.0, reading.getProgress(), 0.0001);
     assertEquals("recommended: ", false, reading.isRecommended());
     assertEquals("is private: ", false, reading.isPrivate());
