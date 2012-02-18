@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
 
 /**
@@ -22,9 +23,10 @@ public class ReadingPeriodTests {
     assertEquals(-1, period.getId());
     assertEquals(-1, period.getReadingId());
     assertEquals(-1, period.getUserId());
-    assertEquals(null, period.getStartedAt());
+    assertNull(period.getStartedAt());
     assertEquals(0, period.getDuration());
     assertEquals(0.0, period.getProgress(), 0.001);
+    assertEquals("", period.getIdentifier());
   }
 
   @Test
@@ -39,6 +41,10 @@ public class ReadingPeriodTests {
     assertEquals("2010-12-14T10:36:21Z", ReadmillEntity.toISO8601(period.getStartedAt()));
     assertEquals(300, period.getDuration());
     assertEquals(0.87, period.getProgress(), 0.001);
+    assertEquals(
+        "DAC1902F-20FA-42DA-B759-55F1A9971FD6-15806-00000D75B24D673C",
+        period.getIdentifier()
+    );
   }
 
   @Test

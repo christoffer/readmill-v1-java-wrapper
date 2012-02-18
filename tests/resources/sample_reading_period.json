@@ -1,9 +1,10 @@
 {
-    "id": 13,
-    "reading_id": 21,
-    "user_id": 2,
-    "started_at": "2010-12-14T10:36:21Z",
-    "duration": 300,
-    "progress": 0.87,
-    "locations": []
+  "id":13,
+  "reading_id":21,
+  "user_id":2,
+  "started_at":"2010-12-14T10:36:21Z",
+  "duration":300,
+  "progress":0.87,
+  "locations":[],
+  "identifier":"DAC1902F-20FA-42DA-B759-55F1A9971FD6-15806-00000D75B24D673C"
 }

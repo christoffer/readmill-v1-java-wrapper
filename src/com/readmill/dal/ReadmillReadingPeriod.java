@@ -16,8 +16,7 @@ public class ReadmillReadingPeriod extends ReadmillEntity {
   private Date startedAt;
   private double progress;
   private long duration;
-
-  // TODO locations
+  private String identifier;
 
   public ReadmillReadingPeriod(JSONObject json) { super(json); }
 
@@ -29,6 +28,7 @@ public class ReadmillReadingPeriod extends ReadmillEntity {
     startedAt = parseUTC(getString(json, "started_at"));
     progress = json.optDouble("progress", 0.0);
     duration = json.optLong("duration", 0);
+    identifier = getString(json, "identifier");
   }
 
   @Override
@@ -41,6 +41,7 @@ public class ReadmillReadingPeriod extends ReadmillEntity {
     json.put("started_at", toISO8601(startedAt));
     json.put("progress", progress);
     json.put("duration", duration);
+    json.put("identifier", identifier);
 
     return json;
   }
@@ -132,4 +133,11 @@ public class ReadmillReadingPeriod extends ReadmillEntity {
     this.duration = duration;
   }
 
+  public String getIdentifier() {
+    return identifier;
+  }
+
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
 }
