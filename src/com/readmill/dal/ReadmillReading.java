@@ -235,6 +235,10 @@ public class ReadmillReading extends ReadmillEntity {
     return null;
   }
 
+  public ArrayList<ReadmillHighlight> getHighlights() throws ReadmillException {
+    return ReadmillHighlight.getAllForReadingId(id);
+  }
+
   // Getters and setters
 
 	public long getEstimatedTimeLeft() {

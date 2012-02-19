@@ -28,5 +28,12 @@ public interface Params {
       String TITLE                   = "book[title]";
       String AUTHOR                  = "book[author]";
     }
+  
+    interface Highlight {
+      String POSITION                = "highlight[position]";
+      String CONTENT                 = "highlight[content]";
+      String HIGHLIGHTED_AT          = "highlight[highlighted_at]";
+      String LOCATORS_MID            = "highlight[locators][mid]";
+    }
 
 }

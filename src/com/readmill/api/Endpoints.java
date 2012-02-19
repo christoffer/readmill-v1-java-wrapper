@@ -19,4 +19,7 @@ public interface Endpoints {
   String READINGS = "/readings/%d";
   String PINGS = "/readings/%d/pings";
   String PERIODS = "/readings/%d/periods";
+  
+  // Highlight
+  String HIGHLIGHTS = "/readings/%d/highlights";
 }
