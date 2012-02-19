@@ -176,7 +176,7 @@ public abstract class ReadmillEntity {
         throw new ReadmillException(receivedStatus);
       return Http.getJSONArray(response);
     } catch(IOException e) {
-      throw new ReadmillException();
+      throw new ReadmillException(e.getMessage());
     }
   }
 

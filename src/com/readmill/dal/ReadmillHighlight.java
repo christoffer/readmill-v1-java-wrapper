@@ -57,7 +57,7 @@ public class ReadmillHighlight extends ReadmillEntity {
     json.put("reading_id", readingId);
     json.put("position", position);
     json.put("content", content);
-    json.put("highlighted_at", this.toISO8601(highlightedAt));
+    json.put("highlighted_at", toISO8601(highlightedAt));
     json.put("comments_count", commentsCount);
     json.put("likes_count", likesCount);
     json.put("user_id", userId);
@@ -110,12 +110,11 @@ public class ReadmillHighlight extends ReadmillEntity {
    * @param position Position of highlight
    * @param content Content of highlight
    * @param highlightedAt Date of highlight
-   * @param userId Id of the user
    * @return the created ReadmillHighlight
    * @throws ReadmillException When the operation failed
    */
   public static ReadmillHighlight create(long readingId, double position, String content,
-                                    Date highlightedAt, long userId) throws ReadmillException {
+                                         Date highlightedAt) throws ReadmillException {
     Request request = Request.to(Endpoints.HIGHLIGHTS, readingId);
     request.add(Params.Highlight.POSITION, position);
     request.add(Params.Highlight.CONTENT, content);
