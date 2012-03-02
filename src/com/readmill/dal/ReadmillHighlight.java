@@ -118,7 +118,7 @@ public class ReadmillHighlight extends ReadmillEntity {
     Request request = Request.to(Endpoints.HIGHLIGHTS, readingId);
     request.add(Params.Highlight.POSITION, position);
     request.add(Params.Highlight.CONTENT, content);
-    request.add(Params.Highlight.HIGHLIGHTED_AT, highlightedAt);
+    request.add(Params.Highlight.HIGHLIGHTED_AT, toISO8601(highlightedAt));
 
     try {
       HttpResponse response = ReadmillDAL.getWrapper().post(request);
