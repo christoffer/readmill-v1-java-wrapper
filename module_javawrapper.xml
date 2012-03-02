@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_javawrapper" default="compile.module.javawrapper">
+  <dirname property="module.javawrapper.basedir" file="${ant.file.module_javawrapper}"/>
+  
+  <property name="module.jdk.home.javawrapper" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.javawrapper" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.javawrapper" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.javawrapper" value="${compiler.args}"/>
+  
+  <property name="javawrapper.output.dir" value="${module.javawrapper.basedir}/../out/production/JavaWrapper"/>
+  <property name="javawrapper.testoutput.dir" value="${module.javawrapper.basedir}/../out/test/JavaWrapper"/>
+  
+  <path id="javawrapper.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="javawrapper.module.production.classpath">
+    <path refid="${module.jdk.classpath.javawrapper}"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-codec-1.4.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-logging-1.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-cache-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpcore-4.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpmime-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/json.jar"/>
+    <pathelement location="${idea.home}/lib/junit-4.10.jar"/>
+  </path>
+  
+  <path id="javawrapper.runtime.production.module.classpath">
+    <pathelement location="${javawrapper.output.dir}"/>
+  </path>
+  
+  <path id="javawrapper.module.classpath">
+    <path refid="${module.jdk.classpath.javawrapper}"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-codec-1.4.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-logging-1.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-cache-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpcore-4.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpmime-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/json.jar"/>
+    <pathelement location="${idea.home}/lib/junit-4.10.jar"/>
+    <pathelement location="${javawrapper.output.dir}"/>
+  </path>
+  
+  <path id="javawrapper.runtime.module.classpath">
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-codec-1.4.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/commons-logging-1.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpclient-cache-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpcore-4.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/HTTPClient-Lib/httpmime-4.1.1.jar"/>
+    <pathelement location="${basedir}/Wrapper/lib/json.jar"/>
+    <pathelement location="${idea.home}/lib/junit-4.10.jar"/>
+    <pathelement location="${javawrapper.testoutput.dir}"/>
+    <pathelement location="${javawrapper.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.javawrapper">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.javawrapper">
+    <patternset refid="excluded.from.module.javawrapper"/>
+  </patternset>
+  
+  <path id="javawrapper.module.sourcepath">
+    <dirset dir="${module.javawrapper.basedir}">
+      <include name="src"/>
+      <include name="tests/com/readmill/tests/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="javawrapper.module.test.sourcepath">
+    <dirset dir="${module.javawrapper.basedir}">
+      <include name="tests"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.javawrapper" depends="compile.module.javawrapper.production,compile.module.javawrapper.tests" description="Compile module JavaWrapper"/>
+  
+  <target name="compile.module.javawrapper.production" description="Compile module JavaWrapper; production classes">
+    <mkdir dir="${javawrapper.output.dir}"/>
+    <javac destdir="${javawrapper.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.javawrapper}/javac">
+      <compilerarg line="${compiler.args.javawrapper}"/>
+      <bootclasspath refid="javawrapper.module.bootclasspath"/>
+      <classpath refid="javawrapper.module.production.classpath"/>
+      <src refid="javawrapper.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.javawrapper"/>
+    </javac>
+    
+    <copy todir="${javawrapper.output.dir}">
+      <fileset dir="${module.javawrapper.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.javawrapper.basedir}/tests/com/readmill/tests/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.javawrapper.tests" depends="compile.module.javawrapper.production" description="compile module JavaWrapper; test classes" unless="skip.tests">
+    <mkdir dir="${javawrapper.testoutput.dir}"/>
+    <javac destdir="${javawrapper.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.javawrapper}/javac">
+      <compilerarg line="${compiler.args.javawrapper}"/>
+      <bootclasspath refid="javawrapper.module.bootclasspath"/>
+      <classpath refid="javawrapper.module.classpath"/>
+      <src refid="javawrapper.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.javawrapper"/>
+    </javac>
+    
+    <copy todir="${javawrapper.testoutput.dir}">
+      <fileset dir="${module.javawrapper.basedir}/tests">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.javawrapper" description="cleanup module">
+    <delete dir="${javawrapper.output.dir}"/>
+    <delete dir="${javawrapper.testoutput.dir}"/>
+  </target>
+</project>

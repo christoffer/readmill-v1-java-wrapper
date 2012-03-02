@@ -95,7 +95,6 @@ public class ReadmillReading extends ReadmillEntity {
 
     JSONObject jsonBook = json.optJSONObject("book");
     book = new ReadmillBook(jsonBook);
-
   }
 
   @Override
