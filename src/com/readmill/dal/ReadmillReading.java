@@ -161,7 +161,11 @@ public class ReadmillReading extends ReadmillEntity {
   public static ArrayList<ReadmillReading> getAllForUser(long userId) throws ReadmillException {
     ArrayList<ReadmillReading> readingsForUser = new ArrayList<ReadmillReading>();
     String uri = String.format(Endpoints.USER_READINGS, userId);
-    JSONArray jsonResult = getAssertedJSONArray(Request.to(toResourceURI(uri)));
+    Request request = Request.to(toResourceURI(uri));
+    request.with("count", "100");
+    request.with("states", "reading,finished,abandoned");
+    System.out.println(request.toUrl());
+    JSONArray jsonResult = getAssertedJSONArray(request);
 
     for(int i = 0; i < jsonResult.length(); i++) {
       try {
