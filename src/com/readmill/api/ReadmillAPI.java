@@ -70,15 +70,6 @@ public interface ReadmillAPI {
      */
     HttpResponse delete(Request request) throws IOException;
 
-    /**
-     * Resolve the given SoundCloud URI
-     *
-     * @param uri SoundCloud model URI, e.g. http://soundcloud.com/bob
-     * @return the id or -1 if uri not found
-     * @throws IOException network errors
-     */
-//    long resolve(String uri) throws IOException;
-
     /** @return the current token */
     Token getToken();
 
