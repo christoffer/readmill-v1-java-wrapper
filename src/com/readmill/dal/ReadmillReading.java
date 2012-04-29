@@ -190,7 +190,7 @@ public class ReadmillReading extends ReadmillEntity {
   public static ReadmillReading create(long bookId, int state, int privacy) throws ReadmillException {
     Request request = Request.to(Endpoints.BOOK_READINGS, bookId);
 
-    request.add(Params.Reading.IS_PRIVATE, privacy);
+    request.add(Params.Reading.PRIVATE, privacy == Privacy.PRIVATE ? "true" : "false");
     request.add(Params.Reading.STATE, state);
 
     try {
@@ -220,7 +220,7 @@ public class ReadmillReading extends ReadmillEntity {
     Request request = Request.to(Endpoints.READINGS, reading.id);
 
     request.add(Params.Reading.STATE, reading.getState());
-    request.add(Params.Reading.IS_PRIVATE, reading.isPrivate() ? 1 : 0);
+    request.add(Params.Reading.PRIVATE, reading.isPrivate() ? 1 : 0);
 
     try {
       HttpResponse response = ReadmillDAL.getWrapper().put(request);

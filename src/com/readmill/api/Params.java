@@ -6,7 +6,7 @@ package com.readmill.api;
 public interface Params {
 
     interface Reading {
-      String IS_PRIVATE              = "reading[is_private]";
+      String PRIVATE                 = "reading[private]";
       String STATE                   = "reading[state]";
       String CLOSING_REMARK          = "reading[closing_remark]";
     }
